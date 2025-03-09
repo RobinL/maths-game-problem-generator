@@ -30,6 +30,16 @@
             /* Light blue */
         }
 
+        .year1 {
+            background-color: #e8f5e9;
+            /* Light green */
+        }
+
+        .year2 {
+            background-color: #fff3e0;
+            /* Light orange */
+        }
+
         .problem {
             font-size: 18px;
             margin: 10px 0;
@@ -64,6 +74,18 @@
             margin-bottom: 20px;
         }
 
+        .year-controls {
+            margin-bottom: 15px;
+        }
+
+        .year-button {
+            background-color: #6c757d;
+        }
+
+        .year-button.active {
+            background-color: #28a745;
+        }
+
         .type-section {
             margin-top: 40px;
         }
@@ -71,23 +93,48 @@
 </head>
 
 <body>
-    <h1>Math Problem Generator Demo - Reception Year</h1>
-    <p>This demo showcases the new year-specific problem classes, focusing on Reception year problems.</p>
+    <h1>Math Problem Generator Demo</h1>
+    <p>This demo showcases the year-specific problem classes for Reception, Year 1, and Year 2.</p>
+
+    <div class="year-controls">
+        <button id="year-reception" class="year-button active">Reception (Ages 4-5)</button>
+        <button id="year-year1" class="year-button">Year 1 (Ages 5-6)</button>
+        <button id="year-year2" class="year-button">Year 2 (Ages 6-7)</button>
+    </div>
 
     <div class="controls">
         <button id="generate-all">Generate All Problems</button>
         <button id="generate-addition">Generate Addition</button>
         <button id="generate-subtraction">Generate Subtraction</button>
-        <button id="generate-multiplication">Generate Multiplication (Doubling)</button>
-        <button id="generate-division">Generate Division (Halving)</button>
+        <button id="generate-multiplication">Generate Multiplication</button>
+        <button id="generate-division">Generate Division</button>
+        <button id="generate-squared">Generate Squared</button>
     </div>
 
+    <!-- Year Group Problems -->
+    <h2>Year Group Problems</h2>
+
     <!-- Reception Problems -->
-    <h2>Reception Year Problems (Ages 4-5)</h2>
     <div class="problem-section reception">
         <h3>Reception (Ages 4-5)</h3>
         <p>Focus: Simple counting, number bonds to 5, adding and taking away with numbers up to 10</p>
         <div id="reception-problems"></div>
+    </div>
+
+    <!-- Year 1 Problems -->
+    <div class="problem-section year1">
+        <h3>Year 1 (Ages 5-6)</h3>
+        <p>Focus: Number bonds to 20, simple addition and subtraction within 20, introduction to multiplication (2, 5,
+            10) and division</p>
+        <div id="year1-problems"></div>
+    </div>
+
+    <!-- Year 2 Problems -->
+    <div class="problem-section year2">
+        <h3>Year 2 (Ages 6-7)</h3>
+        <p>Focus: Addition and subtraction facts up to 20 and derived facts to 100, recall of 2, 5, and 10 times tables
+            and related division facts</p>
+        <div id="year2-problems"></div>
     </div>
 
     <!-- By Type -->
@@ -103,39 +150,77 @@
     </div>
 
     <div class="problem-section" style="background-color: #f0f4c3;">
-        <h3>Multiplication Problems (Doubling)</h3>
+        <h3>Multiplication Problems</h3>
         <div id="multiplication-problems"></div>
     </div>
 
     <div class="problem-section" style="background-color: #e8eaf6;">
-        <h3>Division Problems (Halving)</h3>
+        <h3>Division Problems</h3>
         <div id="division-problems"></div>
+    </div>
+
+    <div class="problem-section" style="background-color: #ffe0b2;">
+        <h3>Squared Problems</h3>
+        <div id="squared-problems"></div>
     </div>
 
     <script type="module">
         import { createProblem } from '../index.js';
 
+        // Track current year selection
+        let currentYear = 'reception';
+
         // Generate problems on page load
         document.addEventListener('DOMContentLoaded', function () {
             generateAllProblems();
 
-            // Set up event listeners
+            // Set up year selection event listeners
+            document.getElementById('year-reception').addEventListener('click', () => {
+                setActiveYear('reception');
+                generateAllProblems();
+            });
+
+            document.getElementById('year-year1').addEventListener('click', () => {
+                setActiveYear('year1');
+                generateAllProblems();
+            });
+
+            document.getElementById('year-year2').addEventListener('click', () => {
+                setActiveYear('year2');
+                generateAllProblems();
+            });
+
+            // Set up operation type event listeners
             document.getElementById('generate-all').addEventListener('click', generateAllProblems);
             document.getElementById('generate-addition').addEventListener('click', () => generateByType('addition'));
             document.getElementById('generate-subtraction').addEventListener('click', () => generateByType('subtraction'));
             document.getElementById('generate-multiplication').addEventListener('click', () => generateByType('multiplication'));
             document.getElementById('generate-division').addEventListener('click', () => generateByType('division'));
+            document.getElementById('generate-squared').addEventListener('click', () => generateByType('squared'));
         });
 
-        function generateAllProblems() {
-            // Generate by difficulty (only Reception)
-            generateProblemsOfDifficulty('reception', 8);
+        function setActiveYear(year) {
+            currentYear = year;
 
-            // Generate by type
+            // Update button styles
+            document.getElementById('year-reception').classList.remove('active');
+            document.getElementById('year-year1').classList.remove('active');
+            document.getElementById('year-year2').classList.remove('active');
+            document.getElementById(`year-${year}`).classList.add('active');
+        }
+
+        function generateAllProblems() {
+            // Generate by difficulty (Reception, Year 1, and Year 2)
+            generateProblemsOfDifficulty('reception', 4);
+            generateProblemsOfDifficulty('year1', 4);
+            generateProblemsOfDifficulty('year2', 4);
+
+            // Generate by type for the currently selected year
             generateProblemsOfType('addition', 5);
             generateProblemsOfType('subtraction', 5);
             generateProblemsOfType('multiplication', 5);
             generateProblemsOfType('division', 5);
+            generateProblemsOfType('squared', 5);
         }
 
         function generateByType(type) {
@@ -156,9 +241,9 @@
             const container = document.getElementById(`${type}-problems`);
             container.innerHTML = '';
 
-            // Generate problems of this type (only Reception)
+            // Generate problems of this type for the currently selected year
             for (let i = 0; i < count; i++) {
-                const problem = createProblem('reception', type);
+                const problem = createProblem(currentYear, type);
                 displayProblem(problem, container);
             }
         }
@@ -168,7 +253,7 @@
             problemElement.className = 'problem';
 
             // Get the problem details directly from the problemDetails object
-            const expression = problem.problemDetails.expression;
+            let expression = problem.problemDetails.expression;
             const answer = problem.problemDetails.answer;
             const points = problem.getPoints();
 
@@ -177,6 +262,16 @@
             console.log('Expression:', expression);
             console.log('Type:', problem.type);
             console.log('Symbol:', problem.symbol);
+
+            // Fix for multiplication and division symbols
+            // If the expression contains 'undefined', replace it with the proper symbol
+            if (expression.includes('undefined')) {
+                if (problem.type === 'multiplication') {
+                    expression = expression.replace('undefined', '×');
+                } else if (problem.type === 'division') {
+                    expression = expression.replace('undefined', '÷');
+                }
+            }
 
             problemElement.innerHTML = `
                 <span class="expression">${expression} = ?</span>

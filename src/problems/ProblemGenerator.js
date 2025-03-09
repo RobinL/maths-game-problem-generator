@@ -6,6 +6,20 @@ import ReceptionSubtractionProblem from './reception/ReceptionSubtractionProblem
 import ReceptionMultiplicationProblem from './reception/ReceptionMultiplicationProblem.js';
 import ReceptionDivisionProblem from './reception/ReceptionDivisionProblem.js';
 
+// Import Year 1-specific problem classes
+import Year1AdditionProblem from './year1/Year1AdditionProblem.js';
+import Year1SubtractionProblem from './year1/Year1SubtractionProblem.js';
+import Year1MultiplicationProblem from './year1/Year1MultiplicationProblem.js';
+import Year1DivisionProblem from './year1/Year1DivisionProblem.js';
+import Year1SquaredProblem from './year1/Year1SquaredProblem.js';
+
+// Import Year 2-specific problem classes
+import Year2AdditionProblem from './year2/Year2AdditionProblem.js';
+import Year2SubtractionProblem from './year2/Year2SubtractionProblem.js';
+import Year2MultiplicationProblem from './year2/Year2MultiplicationProblem.js';
+import Year2DivisionProblem from './year2/Year2DivisionProblem.js';
+import Year2SquaredProblem from './year2/Year2SquaredProblem.js';
+
 // Import legacy problem classes (to be replaced gradually)
 import AdditionProblem from './AdditionProblem.js';
 import SubtractionProblem from './SubtractionProblem.js';
@@ -24,21 +38,23 @@ const PROBLEM_TYPE_CLASSES = {
         division: ReceptionDivisionProblem,
         // Squared not used in Reception
     },
-    // Legacy problem types for other years (to be replaced)
+    // Year 1 problem types
     year1: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
+        addition: Year1AdditionProblem,
+        subtraction: Year1SubtractionProblem,
+        multiplication: Year1MultiplicationProblem,
+        division: Year1DivisionProblem,
+        squared: Year1SquaredProblem
     },
+    // Year 2 problem types
     year2: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
+        addition: Year2AdditionProblem,
+        subtraction: Year2SubtractionProblem,
+        multiplication: Year2MultiplicationProblem,
+        division: Year2DivisionProblem,
+        squared: Year2SquaredProblem
     },
+    // Legacy problem types for other years (to be replaced)
     year3: {
         addition: AdditionProblem,
         subtraction: SubtractionProblem,
