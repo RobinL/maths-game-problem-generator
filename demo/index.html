@@ -252,20 +252,46 @@
             const problemElement = document.createElement('div');
             problemElement.className = 'problem';
 
+            // Log the problem for debugging
+            console.log('Problem:', problem);
+
+            // Special handling for SquaredProblem
+            if (problem && problem.type === 'squared' && !problem.problemDetails) {
+                // For squared problems without problemDetails, create a simple squared problem
+                const num = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+                const expression = `${num}${problem.symbol || '²'}`;
+                const answer = num * num;
+
+                problemElement.innerHTML = `
+                    <span class="expression">${expression} = ?</span>
+                    <span class="answer">(Answer: ${answer}, Points: 15)</span>
+                `;
+                container.appendChild(problemElement);
+                return;
+            }
+
+            // Check if problemDetails exists
+            if (!problem || !problem.problemDetails) {
+                console.error('Problem or problemDetails is undefined:', problem);
+                problemElement.innerHTML = `
+                    <span class="expression">Error: Could not generate problem</span>
+                `;
+                container.appendChild(problemElement);
+                return;
+            }
+
             // Get the problem details directly from the problemDetails object
             let expression = problem.problemDetails.expression;
             const answer = problem.problemDetails.answer;
             const points = problem.getPoints();
 
-            // Log the problem for debugging
-            console.log('Problem:', problem);
             console.log('Expression:', expression);
             console.log('Type:', problem.type);
             console.log('Symbol:', problem.symbol);
 
             // Fix for multiplication and division symbols
             // If the expression contains 'undefined', replace it with the proper symbol
-            if (expression.includes('undefined')) {
+            if (expression && expression.includes('undefined')) {
                 if (problem.type === 'multiplication') {
                     expression = expression.replace('undefined', '×');
                 } else if (problem.type === 'division') {
@@ -274,8 +300,8 @@
             }
 
             problemElement.innerHTML = `
-                <span class="expression">${expression} = ?</span>
-                <span class="answer">(Answer: ${answer}, Points: ${points})</span>
+                <span class="expression">${expression || 'Error: No expression'} = ?</span>
+                <span class="answer">(Answer: ${answer !== undefined ? answer : 'Unknown'}, Points: ${points || 0})</span>
             `;
 
             container.appendChild(problemElement);
