@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Problem Generator Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .problem-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .easy {
+            background-color: #d4edda;
+        }
+
+        .medium {
+            background-color: #fff3cd;
+        }
+
+        .hard {
+            background-color: #f8d7da;
+        }
+
+        .problem {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .answer {
+            color: #666;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Math Problem Generator Demo</h1>
+    <button id="generate">Generate New Problems</button>
+
+    <div class="problem-section easy">
+        <h2>Easy Problems</h2>
+        <div id="easy-problems"></div>
+    </div>
+
+    <div class="problem-section medium">
+        <h2>Medium Problems</h2>
+        <div id="medium-problems"></div>
+    </div>
+
+    <div class="problem-section hard">
+        <h2>Hard Problems</h2>
+        <div id="hard-problems"></div>
+    </div>
+
+    <script type="module">
+        import { createMathProblem, getProblemExpression, getAnswer, getPoints } from '../index.js';
+
+        document.getElementById('generate').addEventListener('click', generateProblems);
+
+        // Generate problems on page load
+        generateProblems();
+
+        function generateProblems() {
+            generateProblemsOfType('easy', 10);
+            generateProblemsOfType('medium', 10);
+            generateProblemsOfType('hard', 10);
+        }
+
+        function generateProblemsOfType(difficulty, count) {
+            const container = document.getElementById(`${difficulty}-problems`);
+            container.innerHTML = '';
+
+            for (let i = 0; i < count; i++) {
+                const problem = createMathProblem(difficulty);
+                const expression = getProblemExpression(problem);
+                const answer = getAnswer(problem);
+                const points = getPoints(problem);
+
+                const problemElement = document.createElement('div');
+                problemElement.className = 'problem';
+                problemElement.innerHTML = `
+                    <span class="expression">${expression} = ?</span>
+                    <span class="answer">(Answer: ${answer}, Points: ${points})</span>
+                `;
+
+                container.appendChild(problemElement);
+            }
+        }
+    </script>
+</body>
+
+</html>
