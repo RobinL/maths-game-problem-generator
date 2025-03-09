@@ -147,9 +147,11 @@ export default class SubtractionProblem extends ProblemType {
                 }
             }
 
+            answer = parseFloat((a - b).toFixed(1)); // Round to 1 decimal place
+
             return {
                 expression: `${a} ${this.symbol} ${b}`,
-                answer: parseFloat((a - b).toFixed(2)), // Round to 2 decimal places
+                answer,
                 operands: [a, b]
             };
         }
@@ -158,42 +160,58 @@ export default class SubtractionProblem extends ProblemType {
         if (params.maxValue <= 5 && Math.random() < 0.3) {
             a = 4;
             b = 3;
+            answer = a - b;
             return {
                 expression: `${a} ${this.symbol} ${b}`,
-                answer: a - b,
+                answer,
                 operands: [a, b]
             };
         }
 
         // For Year 1, include specific examples like 16 - 7 = 9
         if (params.maxValue === 20 && Math.random() < 0.3) {
-            a = 16;
-            b = 7;
+            a = 17;  // Changed from 16 to match your example
+            b = 8;   // Changed from 7 to match your example
+            answer = a - b;
             return {
                 expression: `${a} ${this.symbol} ${b}`,
-                answer: a - b,
+                answer,
                 operands: [a, b]
             };
         }
 
         // For Year 2, include specific examples like 24 - 17 = 7
         if (params.maxValue === 50 && params.minValue === 10 && Math.random() < 0.3) {
-            a = 24;
-            b = 17;
+            a = 10;  // Changed to match your example
+            b = 10;  // Changed to match your example
+            answer = a - b;
             return {
                 expression: `${a} ${this.symbol} ${b}`,
-                answer: a - b,
+                answer,
                 operands: [a, b]
             };
         }
 
         // For Year 3, include specific examples like 80 - 50 = 30
         if (params.restrictToMultiplesOf === 10 && Math.random() < 0.3) {
-            a = 80;
-            b = 50;
+            a = 100;  // Changed to match your example
+            b = 80;   // Changed to match your example
+            answer = a - b;
             return {
                 expression: `${a} ${this.symbol} ${b}`,
-                answer: a - b,
+                answer,
+                operands: [a, b]
+            };
+        }
+
+        // For Year 4, include specific examples
+        if (params.maxValue === 1000 && Math.random() < 0.3) {
+            a = 901;
+            b = 301;
+            answer = a - b;
+            return {
+                expression: `${a} ${this.symbol} ${b}`,
+                answer,
                 operands: [a, b]
             };
         }
@@ -303,10 +321,10 @@ export default class SubtractionProblem extends ProblemType {
                 a = this._getRandomInt(params.minValue, params.maxValue);
                 b = this._getRandomInt(params.minValue, params.maxValue);
             }
-
-            // Calculate the answer
-            answer = a - b;
         }
+
+        // Calculate the answer - ensure this happens for all code paths
+        answer = a - b;
 
         // After generating the expression, check if it fits within maxCharacters
         expression = `${a} ${this.symbol} ${b}`;
