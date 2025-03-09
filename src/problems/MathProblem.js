@@ -44,7 +44,21 @@ export default class MathProblem {
      * @returns {boolean} Whether the answer is correct
      */
     validate(userAnswer) {
-        return userAnswer === this.answer;
+        const isCorrect = userAnswer === this.answer;
+
+        // Debug logging
+        console.log('------- Answer Validation -------');
+        console.log(`Problem: ${this.expression} = ?`);
+        console.log(`User answer: ${userAnswer} (${typeof userAnswer})`);
+        console.log(`Correct answer: ${this.answer} (${typeof this.answer})`);
+        console.log(`Result: ${isCorrect ? '✅ Correct' : '❌ Incorrect'}`);
+
+        // Check for potential issues
+        if (!isCorrect && Math.abs(userAnswer - this.answer) < 0.0001) {
+            console.log('⚠️ Very close! Possible floating-point precision issue.');
+        }
+
+        return isCorrect;
     }
 
     /**

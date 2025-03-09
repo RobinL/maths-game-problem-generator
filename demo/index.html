@@ -60,6 +60,21 @@
             /* Another light green */
         }
 
+        .year7 {
+            background-color: #bbdefb;
+            /* Light blue */
+        }
+
+        .year8 {
+            background-color: #dcedc8;
+            /* Light green */
+        }
+
+        .year9 {
+            background-color: #ffecb3;
+            /* Light amber */
+        }
+
         .problem {
             font-size: 18px;
             margin: 10px 0;
@@ -113,7 +128,7 @@
     </div>
 
     <!-- By Difficulty -->
-    <h2>Problems by UK Primary School Year Level</h2>
+    <h2>Problems by UK School Year Level</h2>
     <div class="problem-section reception">
         <h3>Reception (Ages 4-5)</h3>
         <p>Focus: Simple counting, number bonds to 5, adding and taking away with numbers up to 10</p>
@@ -154,6 +169,24 @@
         <h3>Year 6 (Ages 10-11)</h3>
         <p>Focus: Mental calculations with larger numbers, fractions, decimals, and percentages</p>
         <div id="year6-problems"></div>
+    </div>
+
+    <div class="problem-section year7">
+        <h3>Year 7 (Ages 11-12)</h3>
+        <p>Focus: Three-digit numbers, decimals with up to two places, two-digit by one-digit multiplication</p>
+        <div id="year7-problems"></div>
+    </div>
+
+    <div class="problem-section year8">
+        <h3>Year 8 (Ages 12-13)</h3>
+        <p>Focus: Four-digit numbers, decimals with up to three places, two-digit by two-digit multiplication</p>
+        <div id="year8-problems"></div>
+    </div>
+
+    <div class="problem-section year9">
+        <h3>Year 9 (Ages 13-14)</h3>
+        <p>Focus: Scientific notation, negative numbers, three-digit by one-digit multiplication, cube numbers</p>
+        <div id="year9-problems"></div>
     </div>
 
     <!-- By Type -->
@@ -216,17 +249,20 @@
             generateProblemsOfDifficulty('year4', 4);
             generateProblemsOfDifficulty('year5', 4);
             generateProblemsOfDifficulty('year6', 4);
+            generateProblemsOfDifficulty('year7', 4);
+            generateProblemsOfDifficulty('year8', 4);
+            generateProblemsOfDifficulty('year9', 4);
 
             // Generate by type
-            generateProblemsOfType('addition', 7);
-            generateProblemsOfType('subtraction', 7);
-            generateProblemsOfType('multiplication', 7);
-            generateProblemsOfType('division', 7);
-            generateProblemsOfType('squared', 7);
+            generateProblemsOfType('addition', 10);
+            generateProblemsOfType('subtraction', 10);
+            generateProblemsOfType('multiplication', 10);
+            generateProblemsOfType('division', 10);
+            generateProblemsOfType('squared', 10);
         }
 
         function generateByType(type) {
-            generateProblemsOfType(type, 21);
+            generateProblemsOfType(type, 30);
         }
 
         function generateProblemsOfDifficulty(difficulty, count) {
@@ -244,10 +280,10 @@
             container.innerHTML = '';
 
             // Generate problems of this type at each difficulty level
-            const difficulties = ['reception', 'year1', 'year2', 'year3', 'year4', 'year5', 'year6'];
+            const difficulties = ['reception', 'year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7', 'year8', 'year9'];
 
             for (const difficulty of difficulties) {
-                for (let i = 0; i < count / 7; i++) {
+                for (let i = 0; i < count / difficulties.length; i++) {
                     const problem = createProblemOfType(type, difficulty);
                     displayProblem(problem, container, difficulty);
                 }

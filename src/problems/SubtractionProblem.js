@@ -293,14 +293,19 @@ export default class SubtractionProblem extends ProblemType {
             // Choose a random strategy
             const strategy = strategies[Math.floor(Math.random() * strategies.length)];
             strategy();
-        } else if (params.ensurePositiveResult) {
-            // Ensure a ≥ b for positive results
-            b = this._getRandomInt(params.minValue, params.maxValue);
-            a = this._getRandomInt(b, params.maxValue);
         } else {
             // Standard random generation
-            a = this._getRandomInt(params.minValue, params.maxValue);
-            b = this._getRandomInt(params.minValue, params.maxValue);
+            if (params.ensurePositiveResult) {
+                // Ensure a ≥ b for positive results
+                b = this._getRandomInt(params.minValue, params.maxValue);
+                a = this._getRandomInt(b, params.maxValue);
+            } else {
+                a = this._getRandomInt(params.minValue, params.maxValue);
+                b = this._getRandomInt(params.minValue, params.maxValue);
+            }
+
+            // Calculate the answer
+            answer = a - b;
         }
 
         // After generating the expression, check if it fits within maxCharacters
