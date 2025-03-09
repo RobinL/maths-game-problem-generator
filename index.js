@@ -60,7 +60,7 @@ function getAnswer(problem) {
  * @param {string} difficulty - The difficulty level
  * @returns {MathProblem} A new math problem instance
  */
-function createProblemOfType(problemType, difficulty = 'medium') {
+function createProblemOfType(problemType, difficulty = 'year3') {
     return createMathProblem(difficulty, problemType);
 }
 
