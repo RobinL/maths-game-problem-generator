@@ -1,12 +1,96 @@
-import MathProblem from './MathProblem.js';
+import { DIFFICULTY_LEVELS } from '../difficulty/DifficultyLevel.js';
+
+// Import Reception-specific problem classes
+import ReceptionAdditionProblem from './reception/ReceptionAdditionProblem.js';
+import ReceptionSubtractionProblem from './reception/ReceptionSubtractionProblem.js';
+import ReceptionMultiplicationProblem from './reception/ReceptionMultiplicationProblem.js';
+import ReceptionDivisionProblem from './reception/ReceptionDivisionProblem.js';
+
+// Import legacy problem classes (to be replaced gradually)
 import AdditionProblem from './AdditionProblem.js';
 import SubtractionProblem from './SubtractionProblem.js';
 import MultiplicationProblem from './MultiplicationProblem.js';
 import DivisionProblem from './DivisionProblem.js';
 import SquaredProblem from './SquaredProblem.js';
-import { DIFFICULTY_LEVELS } from '../difficulty/DifficultyLevel.js';
 
-// Create instances of each problem type
+/**
+ * Problem type registry by year and operation
+ */
+const PROBLEM_TYPE_CLASSES = {
+    reception: {
+        addition: ReceptionAdditionProblem,
+        subtraction: ReceptionSubtractionProblem,
+        multiplication: ReceptionMultiplicationProblem,
+        division: ReceptionDivisionProblem,
+        // Squared not used in Reception
+    },
+    // Legacy problem types for other years (to be replaced)
+    year1: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year2: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year3: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year4: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year5: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year6: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year7: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year8: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    },
+    year9: {
+        addition: AdditionProblem,
+        subtraction: SubtractionProblem,
+        multiplication: MultiplicationProblem,
+        division: DivisionProblem,
+        squared: SquaredProblem
+    }
+};
+
+// Legacy problem type instances (for backward compatibility)
 const PROBLEM_TYPES = {
     addition: new AdditionProblem(),
     subtraction: new SubtractionProblem(),
@@ -94,9 +178,9 @@ const TYPE_DISTRIBUTIONS = {
 
 /**
  * Create a math problem of the specified difficulty
- * @param {string} difficulty - The difficulty level ('reception', 'year1', 'year2', 'year3', 'year4', 'year5', or 'year6')
+ * @param {string} difficulty - The difficulty level ('reception', 'year1', 'year2', etc.)
  * @param {string|null} specificType - Optional specific problem type
- * @returns {MathProblem} A new math problem instance
+ * @returns {Object} A new math problem instance
  */
 function createMathProblem(difficulty = 'reception', specificType = null) {
     // Get the difficulty level
@@ -105,37 +189,56 @@ function createMathProblem(difficulty = 'reception', specificType = null) {
     // Determine problem type
     let problemType;
 
-    if (specificType && PROBLEM_TYPES[specificType]) {
-        // Use the specified type if valid
-        problemType = PROBLEM_TYPES[specificType];
+    if (specificType) {
+        if (PROBLEM_TYPE_CLASSES[difficulty] && PROBLEM_TYPE_CLASSES[difficulty][specificType]) {
+            // Use the year-specific problem class if available
+            const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty][specificType];
+            problemType = new ProblemClass();
+        } else if (PROBLEM_TYPES[specificType]) {
+            // Fall back to legacy problem type if needed
+            problemType = PROBLEM_TYPES[specificType];
+        } else {
+            // Default to addition if type not found
+            const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty].addition;
+            problemType = new ProblemClass();
+        }
     } else {
         // Select a type based on the distribution for this difficulty
-        problemType = selectProblemType(difficulty);
+        const type = selectProblemType(difficulty);
+
+        if (PROBLEM_TYPE_CLASSES[difficulty] && PROBLEM_TYPE_CLASSES[difficulty][type]) {
+            // Use the year-specific problem class if available
+            const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty][type];
+            problemType = new ProblemClass();
+        } else {
+            // Fall back to legacy problem type
+            problemType = PROBLEM_TYPES[type];
+        }
     }
 
-    // Create and return the problem
-    return new MathProblem(problemType, difficultyLevel);
+    // Return the problem (the constructor will generate it)
+    return problemType;
 }
 
 /**
  * Select a problem type based on the distribution for the given difficulty
  * @param {string} difficulty - The difficulty level
- * @returns {Object} A problem type instance
+ * @returns {string} A problem type name
  */
 function selectProblemType(difficulty) {
-    const distribution = TYPE_DISTRIBUTIONS[difficulty] || TYPE_DISTRIBUTIONS.easy;
+    const distribution = TYPE_DISTRIBUTIONS[difficulty] || TYPE_DISTRIBUTIONS.reception;
     const rand = Math.random();
 
     let cumulativeProbability = 0;
     for (const [type, probability] of Object.entries(distribution)) {
         cumulativeProbability += probability;
         if (rand < cumulativeProbability && probability > 0) {
-            return PROBLEM_TYPES[type];
+            return type;
         }
     }
 
     // Fallback to addition if somehow nothing was selected
-    return PROBLEM_TYPES.addition;
+    return 'addition';
 }
 
 /**

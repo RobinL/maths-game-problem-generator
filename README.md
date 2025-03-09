@@ -1,6 +1,82 @@
-# Maths Game Problem Generator
+# Math Game Problem Generator
 
-A lightweight JavaScript library for generating math problems of various difficulties. Designed for educational games and applications, this package can generate problems aligned with curriculum standards.
+A JavaScript library for generating math problems tailored to different UK primary school year levels.
+
+## Project Structure
+
+The project has been refactored to use a more maintainable approach with year-specific problem classes:
+
+```
+src/
+├── difficulty/
+│   └── DifficultyLevel.js       # Defines difficulty levels and parameters
+├── problems/
+│   ├── base/                    # Base classes for each operation
+│   │   ├── BaseMathProblem.js   # Base class for all math problems
+│   │   ├── BaseAdditionProblem.js
+│   │   ├── BaseSubtractionProblem.js
+│   │   ├── BaseMultiplicationProblem.js
+│   │   ├── BaseDivisionProblem.js
+│   │   └── BaseSquaredProblem.js
+│   ├── reception/               # Reception-specific problem classes
+│   │   ├── ReceptionAdditionProblem.js
+│   │   ├── ReceptionSubtractionProblem.js
+│   │   ├── ReceptionMultiplicationProblem.js
+│   │   └── ReceptionDivisionProblem.js
+│   ├── AdditionProblem.js       # Legacy problem classes (to be replaced)
+│   ├── SubtractionProblem.js
+│   ├── MultiplicationProblem.js
+│   ├── DivisionProblem.js
+│   ├── SquaredProblem.js
+│   ├── MathProblem.js           # Legacy MathProblem class
+│   ├── ProblemType.js           # Legacy ProblemType base class
+│   └── ProblemGenerator.js      # Factory for creating problems
+```
+
+## Design Approach
+
+The project has been refactored to use a more maintainable approach:
+
+1. **Base Classes**: Each operation has a base class (e.g., `BaseAdditionProblem`) that defines common functionality.
+
+2. **Year-Specific Classes**: Each year level has its own implementation for each operation (e.g., `ReceptionAdditionProblem`), with hardcoded parameters appropriate for that year level.
+
+3. **Problem Generator**: The `ProblemGenerator` selects the appropriate class based on the year level and operation.
+
+This approach simplifies the code by:
+- Removing complex parameter-based logic
+- Making each class focused on a specific year level's requirements
+- Making it easier to add or modify year-specific behavior
+
+## Current Implementation Status
+
+- ✅ Base classes for all operations
+- ✅ Reception-specific problem classes
+- ⬜ Year 1-9 specific problem classes (to be implemented)
+- ✅ Updated ProblemGenerator to use the new classes
+
+## Usage
+
+```javascript
+import { createMathProblem } from './src/problems/ProblemGenerator.js';
+
+// Create a Reception-level addition problem
+const problem = createMathProblem('reception', 'addition');
+
+console.log(problem.expression); // e.g., "3 + 2"
+console.log(problem.answer);     // e.g., 5
+
+// Check a user's answer
+const isCorrect = problem.validate(5); // true
+```
+
+## Extending
+
+To add support for a new year level:
+
+1. Create a new directory `src/problems/yearX/`
+2. Create year-specific problem classes for each operation
+3. Update `PROBLEM_TYPE_CLASSES` in `ProblemGenerator.js`
 
 ## Features
 
@@ -235,31 +311,6 @@ npm run demo
 ```
 
 This will start a local web server and open the demo page in your browser.
-
-## Project Structure
-
-```
-maths-game-problem-generator/
-├── index.js                # Main entry point and API
-├── package.json            # Package configuration
-├── server.js               # Demo server
-├── demo/
-│   └── index.html          # Demo web application
-└── src/
-    ├── problems/
-    │   ├── MathProblem.js           # Math problem combining type + difficulty
-    │   ├── ProblemGenerator.js      # Factory for creating problems
-    │   └── types/
-    │       ├── ProblemType.js       # Base class for problem types
-    │       ├── AdditionProblem.js   # Addition implementation
-    │       ├── SubtractionProblem.js # Subtraction implementation
-    │       ├── MultiplicationProblem.js # Multiplication implementation
-    │       └── DivisionProblem.js   # Division implementation
-    ├── difficulty/
-    │   └── DifficultyLevel.js      # Difficulty level definitions
-    └── utils/
-        └── helpers.js              # Utility functions
-```
 
 ## License
 

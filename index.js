@@ -1,3 +1,8 @@
+/**
+ * Math Game Problem Generator
+ * A JavaScript library for generating math problems tailored to different UK primary school year levels.
+ */
+
 import {
     createMathProblem,
     getAvailableProblemTypes,
@@ -18,8 +23,34 @@ import DivisionProblem from './src/problems/DivisionProblem.js';
 import SquaredProblem from './src/problems/SquaredProblem.js';
 
 /**
+ * Create a math problem of the specified difficulty and type
+ * @param {string} difficulty - The difficulty level ('reception', 'year1', etc.)
+ * @param {string|null} specificType - Optional specific problem type
+ * @returns {Object} A math problem instance
+ */
+function createProblem(difficulty = 'reception', specificType = null) {
+    return createMathProblem(difficulty, specificType);
+}
+
+/**
+ * Get all available problem types
+ * @returns {Array<string>} List of available problem types
+ */
+function getAvailableTypes() {
+    return getAvailableProblemTypes();
+}
+
+/**
+ * Get all available difficulty levels
+ * @returns {Array<string>} List of available difficulty levels
+ */
+function getAvailableDifficulties() {
+    return getAvailableDifficultyLevels();
+}
+
+/**
  * Validate an answer for a given problem
- * @param {MathProblem} problem - The math problem
+ * @param {Object} problem - The math problem
  * @param {number} answer - The answer to validate
  * @returns {boolean} Whether the answer is correct
  */
@@ -29,7 +60,7 @@ function validateAnswer(problem, answer) {
 
 /**
  * Get the expression for a problem
- * @param {MathProblem} problem - The math problem
+ * @param {Object} problem - The math problem
  * @returns {string} The problem expression
  */
 function getProblemExpression(problem) {
@@ -37,31 +68,21 @@ function getProblemExpression(problem) {
 }
 
 /**
- * Get the point value for a problem
- * @param {MathProblem} problem - The math problem
- * @returns {number} Points for solving this problem
+ * Get the points for a problem
+ * @param {Object} problem - The math problem
+ * @returns {number} The points value
  */
 function getPoints(problem) {
     return problem.getPoints();
 }
 
 /**
- * Get the correct answer for a problem
- * @param {MathProblem} problem - The math problem
+ * Get the answer for a problem
+ * @param {Object} problem - The math problem
  * @returns {number} The correct answer
  */
 function getAnswer(problem) {
     return problem.answer;
-}
-
-/**
- * Create a problem of a specific type and difficulty
- * @param {string} problemType - The type of problem to create
- * @param {string} difficulty - The difficulty level
- * @returns {MathProblem} A new math problem instance
- */
-function createProblemOfType(problemType, difficulty = 'year3') {
-    return createMathProblem(difficulty, problemType);
 }
 
 export {
@@ -73,9 +94,9 @@ export {
     getAnswer,
 
     // New functions
-    createProblemOfType,
-    getAvailableProblemTypes,
-    getAvailableDifficultyLevels,
+    createProblem,
+    getAvailableTypes,
+    getAvailableDifficulties,
 
     // Classes for direct access
     MathProblem,

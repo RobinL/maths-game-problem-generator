@@ -1,73 +1,73 @@
-import http from 'http';
-import fs from 'fs';
-import path from 'path';
+/**
+ * Simple HTTP server for the Math Game Problem Generator demo
+ */
+import { createServer } from 'http';
+import { readFile } from 'fs/promises';
+import { join, extname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Get the directory name of the current module
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-const server = http.createServer((req, res) => {
-    // Log the request for debugging
-    console.log(`Request: ${req.url}`);
+// MIME types for different file extensions
+const MIME_TYPES = {
+    '.html': 'text/html',
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon'
+};
 
-    // Get the file path
-    let filePath = '.' + req.url;
-    if (filePath === './') {
-        filePath = './demo/index.html';
+// Default MIME type
+const DEFAULT_MIME_TYPE = 'text/plain';
+
+// Create the server
+const server = createServer(async (req, res) => {
+    console.log(`${req.method} ${req.url}`);
+
+    // Parse the URL
+    let path = req.url;
+
+    // Default to index.html if the path is '/'
+    if (path === '/') {
+        path = '/demo/index.html';
     }
 
-    // Normalize path to prevent directory traversal attacks
-    filePath = path.normalize(filePath);
+    try {
+        // Resolve the file path
+        const filePath = join(__dirname, path);
 
-    // Get the full path
-    const fullPath = path.join(__dirname, filePath);
-    console.log(`Serving file: ${fullPath}`);
+        // Read the file
+        const content = await readFile(filePath);
 
-    // Get the file extension
-    const extname = path.extname(filePath);
+        // Determine the MIME type
+        const ext = extname(filePath);
+        const mimeType = MIME_TYPES[ext] || DEFAULT_MIME_TYPE;
 
-    // Set the content type based on file extension
-    let contentType = 'text/html';
-    switch (extname) {
-        case '.js':
-            contentType = 'application/javascript';
-            break;
-        case '.css':
-            contentType = 'text/css';
-            break;
-        case '.json':
-            contentType = 'application/json';
-            break;
-        case '.png':
-            contentType = 'image/png';
-            break;
-        case '.jpg':
-            contentType = 'image/jpg';
-            break;
-    }
-
-    // Read the file
-    fs.readFile(fullPath, (error, content) => {
-        if (error) {
-            console.error(`File error: ${error.code} for ${fullPath}`);
-            if (error.code === 'ENOENT') {
-                // Page not found
-                res.writeHead(404, { 'Content-Type': 'text/html' });
-                res.end(`<h1>404 Not Found</h1><p>File not found: ${req.url}</p>`, 'utf-8');
-            } else {
-                // Server error
-                res.writeHead(500);
-                res.end(`Server Error: ${error.code}`);
-            }
-        } else {
-            // Success - return the file
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+        // Send the response
+        res.writeHead(200, { 'Content-Type': mimeType });
+        res.end(content);
+    } catch (err) {
+        // Handle file not found
+        if (err.code === 'ENOENT') {
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.end('<h1>404 Not Found</h1><p>The requested resource could not be found.</p>');
+            return;
         }
-    });
+
+        // Handle other errors
+        console.error(err);
+        res.writeHead(500, { 'Content-Type': 'text/html' });
+        res.end('<h1>500 Internal Server Error</h1><p>Something went wrong on the server.</p>');
+    }
 });
 
-const PORT = 8080;
+// Start the server
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
     console.log(`Demo available at http://localhost:${PORT}/demo/index.html`);
