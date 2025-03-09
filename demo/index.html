@@ -13,7 +13,9 @@
             padding: 20px;
         }
 
-        h1 {
+        h1,
+        h2,
+        h3 {
             color: #333;
         }
 
@@ -55,67 +57,163 @@
             border-radius: 4px;
             cursor: pointer;
             margin-bottom: 20px;
+            margin-right: 10px;
         }
 
         button:hover {
             background-color: #0056b3;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .type-section {
+            margin-top: 40px;
         }
     </style>
 </head>
 
 <body>
     <h1>Math Problem Generator Demo</h1>
-    <button id="generate">Generate New Problems</button>
 
+    <div class="controls">
+        <button id="generate-all">Generate All Problems</button>
+        <button id="generate-addition">Generate Addition</button>
+        <button id="generate-subtraction">Generate Subtraction</button>
+        <button id="generate-multiplication">Generate Multiplication</button>
+        <button id="generate-division">Generate Division</button>
+    </div>
+
+    <!-- By Difficulty -->
+    <h2>Problems by Difficulty Level</h2>
     <div class="problem-section easy">
-        <h2>Easy Problems</h2>
+        <h3>Easy Problems</h3>
         <div id="easy-problems"></div>
     </div>
 
     <div class="problem-section medium">
-        <h2>Medium Problems</h2>
+        <h3>Medium Problems</h3>
         <div id="medium-problems"></div>
     </div>
 
     <div class="problem-section hard">
-        <h2>Hard Problems</h2>
+        <h3>Hard Problems</h3>
         <div id="hard-problems"></div>
     </div>
 
-    <script type="module">
-        import { createMathProblem, getProblemExpression, getAnswer, getPoints } from '../index.js';
+    <!-- By Type -->
+    <h2 class="type-section">Problems by Type</h2>
+    <div class="problem-section" style="background-color: #e7f5fe;">
+        <h3>Addition Problems</h3>
+        <div id="addition-problems"></div>
+    </div>
 
-        document.getElementById('generate').addEventListener('click', generateProblems);
+    <div class="problem-section" style="background-color: #f8f9fa;">
+        <h3>Subtraction Problems</h3>
+        <div id="subtraction-problems"></div>
+    </div>
+
+    <div class="problem-section" style="background-color: #f0f4c3;">
+        <h3>Multiplication Problems</h3>
+        <div id="multiplication-problems"></div>
+    </div>
+
+    <div class="problem-section" style="background-color: #e8eaf6;">
+        <h3>Division Problems</h3>
+        <div id="division-problems"></div>
+    </div>
+
+    <script type="module">
+        import {
+            createMathProblem,
+            createProblemOfType,
+            getProblemExpression,
+            getAnswer,
+            getPoints,
+            getAvailableProblemTypes,
+            getAvailableDifficultyLevels
+        } from '../index.js';
 
         // Generate problems on page load
-        generateProblems();
+        document.addEventListener('DOMContentLoaded', function () {
+            generateAllProblems();
 
-        function generateProblems() {
-            generateProblemsOfType('easy', 10);
-            generateProblemsOfType('medium', 10);
-            generateProblemsOfType('hard', 10);
+            // Set up event listeners
+            document.getElementById('generate-all').addEventListener('click', generateAllProblems);
+            document.getElementById('generate-addition').addEventListener('click', () => generateByType('addition'));
+            document.getElementById('generate-subtraction').addEventListener('click', () => generateByType('subtraction'));
+            document.getElementById('generate-multiplication').addEventListener('click', () => generateByType('multiplication'));
+            document.getElementById('generate-division').addEventListener('click', () => generateByType('division'));
+        });
+
+        function generateAllProblems() {
+            // Generate by difficulty
+            generateProblemsOfDifficulty('easy', 6);
+            generateProblemsOfDifficulty('medium', 6);
+            generateProblemsOfDifficulty('hard', 6);
+
+            // Generate by type
+            generateProblemsOfType('addition', 6);
+            generateProblemsOfType('subtraction', 6);
+            generateProblemsOfType('multiplication', 6);
+            generateProblemsOfType('division', 6);
         }
 
-        function generateProblemsOfType(difficulty, count) {
+        function generateByType(type) {
+            generateProblemsOfType(type, 15);
+        }
+
+        function generateProblemsOfDifficulty(difficulty, count) {
             const container = document.getElementById(`${difficulty}-problems`);
             container.innerHTML = '';
 
             for (let i = 0; i < count; i++) {
                 const problem = createMathProblem(difficulty);
-                const expression = getProblemExpression(problem);
-                const answer = getAnswer(problem);
-                const points = getPoints(problem);
-
-                const problemElement = document.createElement('div');
-                problemElement.className = 'problem';
-                problemElement.innerHTML = `
-                    <span class="expression">${expression} = ?</span>
-                    <span class="answer">(Answer: ${answer}, Points: ${points})</span>
-                `;
-
-                container.appendChild(problemElement);
+                displayProblem(problem, container);
             }
         }
+
+        function generateProblemsOfType(type, count) {
+            const container = document.getElementById(`${type}-problems`);
+            container.innerHTML = '';
+
+            // Generate problems of this type at each difficulty level
+            const difficulties = ['easy', 'medium', 'hard'];
+
+            for (const difficulty of difficulties) {
+                for (let i = 0; i < count / 3; i++) {
+                    const problem = createProblemOfType(type, difficulty);
+                    displayProblem(problem, container, difficulty);
+                }
+            }
+        }
+
+        function displayProblem(problem, container, difficultyLabel = null) {
+            const expression = getProblemExpression(problem);
+            const answer = getAnswer(problem);
+            const points = getPoints(problem);
+
+            const problemElement = document.createElement('div');
+            problemElement.className = 'problem';
+
+            let difficultyInfo = difficultyLabel ?
+                `<span style="color: #666; font-size: 12px;">[${difficultyLabel}]</span> ` : '';
+
+            problemElement.innerHTML = `
+                ${difficultyInfo}<span class="expression">${expression} = ?</span>
+                <span class="answer">(Answer: ${answer}, Points: ${points})</span>
+            `;
+
+            container.appendChild(problemElement);
+        }
+
+        // Display available problem types and difficulty levels (for demonstration)
+        console.log('Available problem types:', getAvailableProblemTypes());
+        console.log('Available difficulty levels:', getAvailableDifficultyLevels());
     </script>
 </body>
 

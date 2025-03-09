@@ -9,6 +9,10 @@ A lightweight JavaScript library for generating math problems of various difficu
 - Provides expression formatting and answer validation
 - Assigns point values based on difficulty
 - Suitable for educational games and applications
+- **NEW**: Problem types are now decoupled from difficulty levels
+- **NEW**: Easily extend with new problem types
+- **NEW**: Create custom difficulty configurations
+- **NEW**: Target specific problem types with customized difficulty
 
 ## Installation
 
@@ -25,6 +29,8 @@ npm install --save maths-game-problem-generator
 ```
 
 ## Usage
+
+### Basic Usage (Original API)
 
 ```javascript
 import { createMathProblem, getProblemExpression, getAnswer, validateAnswer, getPoints } from 'maths-game-problem-generator';
@@ -49,43 +55,147 @@ const points = getPoints(problem);
 console.log(points); // 30 (for medium difficulty)
 ```
 
+### Advanced Usage (New API)
+
+#### Creating Problems by Type
+
+```javascript
+import { createProblemOfType, getProblemExpression, getAnswer } from 'maths-game-problem-generator';
+
+// Create a multiplication problem with medium difficulty
+const multiplicationProblem = createProblemOfType('multiplication', 'medium');
+console.log(getProblemExpression(multiplicationProblem)); // e.g. "6 × 8"
+console.log(getAnswer(multiplicationProblem)); // e.g. 48
+
+// Create an addition problem with hard difficulty
+const additionProblem = createProblemOfType('addition', 'hard');
+console.log(getProblemExpression(additionProblem)); // e.g. "47 + 85"
+console.log(getAnswer(additionProblem)); // e.g. 132
+```
+
+#### Getting Available Types and Difficulties
+
+```javascript
+import { getAvailableProblemTypes, getAvailableDifficultyLevels } from 'maths-game-problem-generator';
+
+// Get all available problem types
+const types = getAvailableProblemTypes();
+console.log(types); // ['addition', 'subtraction', 'multiplication', 'division']
+
+// Get all available difficulty levels
+const difficulties = getAvailableDifficultyLevels();
+console.log(difficulties); // ['easy', 'medium', 'hard']
+```
+
+#### Creating Custom Problem Types
+
+```javascript
+import { ProblemType, DifficultyLevel, MathProblem } from 'maths-game-problem-generator';
+
+// Create a custom problem type for squaring numbers
+class SquaringProblem extends ProblemType {
+    constructor() {
+        super('squaring');
+        this.symbol = '²';
+    }
+
+    generate(params) {
+        const value = this._getRandomInt(params.minValue, params.maxValue);
+        return {
+            expression: `${value}${this.symbol}`,
+            answer: value * value,
+            operands: [value]
+        };
+    }
+
+    _getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+}
+
+// Create a custom difficulty level for your curriculum
+const year3Level = new DifficultyLevel('year3', 25, {
+    default: {
+        minValue: 5,
+        maxValue: 20
+    },
+    addition: {
+        minValue: 10,
+        maxValue: 100
+    },
+    squaring: {
+        minValue: 2,
+        maxValue: 10
+    }
+});
+
+// Create a custom math problem
+const squaringProblem = new MathProblem(new SquaringProblem(), year3Level);
+console.log(squaringProblem.expression); // e.g. "7²"
+console.log(squaringProblem.answer); // e.g. 49
+```
+
 ## Problem Types
 
-### Easy Problems
-- Simple addition with numbers 1-10
-- Simple subtraction with positive answers
+### Addition
+- Simple addition with parameters for minimum and maximum values
 
 ```
 5 + 3 = 8
-9 - 4 = 5
-```
-
-### Medium Problems
-- Two-digit addition with numbers 10-50
-- Two-digit subtraction with numbers 10-99
-- Simple multiplication up to 12×12
-- Simple division with no remainder
-
-```
 25 + 37 = 62
+```
+
+### Subtraction
+- Subtraction with parameters for ensuring positive results
+
+```
+9 - 4 = 5
 45 - 23 = 22
+```
+
+### Multiplication
+- Multiplication with parameters for minimum and maximum values
+
+```
 6 × 8 = 48
-45 / 9 = 5
-```
-
-### Hard Problems
-- Multiplication with numbers up to 12
-- Two-digit addition and subtraction with larger numbers
-
-```
 12 × 11 = 132
-87 - 29 = 58
-64 + 38 = 102
 ```
+
+### Division
+- Division with parameters for divisor range and whether to allow remainders
+
+```
+45 / 9 = 5
+27 / 3 = 9
+```
+
+## Difficulty Levels
+
+Each difficulty level provides appropriate parameters for each problem type:
+
+### Easy
+- Addition: Numbers 1-10
+- Subtraction: Numbers 1-10 with positive results
+- Multiplication: Numbers 1-5
+- Division: Divisors 2-5, clean division only
+
+### Medium
+- Addition: Numbers 10-50
+- Subtraction: Numbers 10-99 with positive results
+- Multiplication: Numbers 2-12
+- Division: Divisors 2-10, clean division only
+
+### Hard
+- Addition: Numbers 10-99
+- Subtraction: Numbers 10-99 with positive results
+- Multiplication: Numbers 5-12
+- Division: Divisors 2-12, may include remainders
 
 ## Demo Application
 
-The package includes a simple demo application to showcase the different types of math problems generated.
+The package includes a demo application to showcase the different types of math problems generated.
 
 ### Running the Demo
 
@@ -95,34 +205,29 @@ npm run demo
 
 This will start a local web server and open the demo page in your browser.
 
-### About the Demo Server
-
-The demo uses a custom Node.js server (server.js) that:
-
-1. Serves the demo/index.html page
-2. Properly handles ES modules with the correct MIME types
-3. Provides detailed logging for debugging
-4. Serves the library files directly without a build step
-
-The demo web page demonstrates generating multiple problems of each difficulty level and displays them along with their answers and point values.
-
 ## Project Structure
 
 ```
 maths-game-problem-generator/
-├── index.js             # Main entry point and API
-├── package.json         # Package configuration
-├── server.js            # Demo server
+├── index.js                # Main entry point and API
+├── package.json            # Package configuration
+├── server.js               # Demo server
 ├── demo/
-│   └── index.html       # Demo web application
+│   └── index.html          # Demo web application
 └── src/
-    ├── problems/        # Problem implementations
-    │   ├── MathProblem.js  # Base problem class
-    │   ├── EasyMath.js     # Easy difficulty problems
-    │   ├── MediumMath.js   # Medium difficulty problems
-    │   └── HardMath.js     # Hard difficulty problems
+    ├── problems/
+    │   ├── MathProblem.js           # Math problem combining type + difficulty
+    │   ├── ProblemGenerator.js      # Factory for creating problems
+    │   └── types/
+    │       ├── ProblemType.js       # Base class for problem types
+    │       ├── AdditionProblem.js   # Addition implementation
+    │       ├── SubtractionProblem.js # Subtraction implementation
+    │       ├── MultiplicationProblem.js # Multiplication implementation
+    │       └── DivisionProblem.js   # Division implementation
+    ├── difficulty/
+    │   └── DifficultyLevel.js      # Difficulty level definitions
     └── utils/
-        └── helpers.js   # Utility functions
+        └── helpers.js              # Utility functions
 ```
 
 ## License

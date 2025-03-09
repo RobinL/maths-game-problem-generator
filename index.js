@@ -1,24 +1,20 @@
-import EasyMath from './src/problems/EasyMath.js';
-import MediumMath from './src/problems/MediumMath.js';
-import HardMath from './src/problems/HardMath.js';
-import MathProblem from './src/problems/MathProblem.js';
+import {
+    createMathProblem,
+    getAvailableProblemTypes,
+    getAvailableDifficultyLevels,
+    DIFFICULTY_LEVELS,
+    PROBLEM_TYPES
+} from './src/problems/ProblemGenerator.js';
 
-/**
- * Create a math problem of the specified difficulty
- * @param {string} difficulty - The difficulty level ('easy', 'medium', or 'hard')
- * @returns {MathProblem} A new math problem instance
- */
-function createMathProblem(difficulty) {
-    switch (difficulty) {
-        case 'hard':
-            return new HardMath();
-        case 'medium':
-            return new MediumMath();
-        case 'easy':
-        default:
-            return new EasyMath();
-    }
-}
+import MathProblem from './src/problems/MathProblem.js';
+import ProblemType from './src/problems/ProblemType.js';
+import DifficultyLevel from './src/difficulty/DifficultyLevel.js';
+
+// Import problem types for direct access
+import AdditionProblem from './src/problems/AdditionProblem.js';
+import SubtractionProblem from './src/problems/SubtractionProblem.js';
+import MultiplicationProblem from './src/problems/MultiplicationProblem.js';
+import DivisionProblem from './src/problems/DivisionProblem.js';
 
 /**
  * Validate an answer for a given problem
@@ -57,15 +53,39 @@ function getAnswer(problem) {
     return problem.answer;
 }
 
+/**
+ * Create a problem of a specific type and difficulty
+ * @param {string} problemType - The type of problem to create
+ * @param {string} difficulty - The difficulty level
+ * @returns {MathProblem} A new math problem instance
+ */
+function createProblemOfType(problemType, difficulty = 'medium') {
+    return createMathProblem(difficulty, problemType);
+}
+
 export {
+    // Main functions (original API)
     createMathProblem,
     validateAnswer,
     getProblemExpression,
     getPoints,
     getAnswer,
-    // Also export the classes if direct access is needed
+
+    // New functions
+    createProblemOfType,
+    getAvailableProblemTypes,
+    getAvailableDifficultyLevels,
+
+    // Classes for direct access
     MathProblem,
-    EasyMath,
-    MediumMath,
-    HardMath
+    ProblemType,
+    DifficultyLevel,
+    AdditionProblem,
+    SubtractionProblem,
+    MultiplicationProblem,
+    DivisionProblem,
+
+    // Constants
+    DIFFICULTY_LEVELS,
+    PROBLEM_TYPES
 };

@@ -1,24 +1,41 @@
 /**
- * Base class for math problems
+ * Main class for math problems, combining a problem type with a difficulty level
  */
 export default class MathProblem {
     /**
      * Create a new math problem
-     * @param {string} difficulty - The difficulty level ('easy', 'medium', or 'hard')
+     * @param {Object} problemType - The type of problem (addition, subtraction, etc.)
+     * @param {Object} difficultyLevel - The difficulty level
      */
-    constructor(difficulty = 'easy') {
-        this.difficulty = difficulty;
-        this.expression = '';
-        this.answer = 0;
+    constructor(problemType, difficultyLevel) {
+        this.problemType = problemType;
+        this.difficultyLevel = difficultyLevel;
+        this.problemDetails = null;
         this.generate();
     }
 
     /**
      * Generate a math problem
-     * This method should be overridden by subclasses
      */
     generate() {
-        console.warn('MathProblem.generate() called on base class - should be overridden');
+        const params = this.difficultyLevel.getParametersForType(this.problemType.type);
+        this.problemDetails = this.problemType.generate(params);
+    }
+
+    /**
+     * Get the problem expression
+     * @returns {string} The formatted expression
+     */
+    get expression() {
+        return this.problemDetails?.expression || '';
+    }
+
+    /**
+     * Get the correct answer
+     * @returns {number} The answer
+     */
+    get answer() {
+        return this.problemDetails?.answer || 0;
     }
 
     /**
@@ -35,13 +52,6 @@ export default class MathProblem {
      * @returns {number} Points for solving this problem
      */
     getPoints() {
-        switch (this.difficulty) {
-            case 'hard':
-                return 50;
-            case 'medium':
-                return 30;
-            default:
-                return 20;
-        }
+        return this.difficultyLevel.getPoints();
     }
 }
