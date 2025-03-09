@@ -86,6 +86,7 @@
         <button id="generate-subtraction">Generate Subtraction</button>
         <button id="generate-multiplication">Generate Multiplication</button>
         <button id="generate-division">Generate Division</button>
+        <button id="generate-squared">Generate Squared</button>
     </div>
 
     <!-- By Difficulty -->
@@ -127,6 +128,11 @@
         <div id="division-problems"></div>
     </div>
 
+    <div class="problem-section" style="background-color: #e1bee7;">
+        <h3>Squared Problems</h3>
+        <div id="squared-problems"></div>
+    </div>
+
     <script type="module">
         import {
             createMathProblem,
@@ -148,6 +154,7 @@
             document.getElementById('generate-subtraction').addEventListener('click', () => generateByType('subtraction'));
             document.getElementById('generate-multiplication').addEventListener('click', () => generateByType('multiplication'));
             document.getElementById('generate-division').addEventListener('click', () => generateByType('division'));
+            document.getElementById('generate-squared').addEventListener('click', () => generateByType('squared'));
         });
 
         function generateAllProblems() {
@@ -161,6 +168,7 @@
             generateProblemsOfType('subtraction', 6);
             generateProblemsOfType('multiplication', 6);
             generateProblemsOfType('division', 6);
+            generateProblemsOfType('squared', 6);
         }
 
         function generateByType(type) {

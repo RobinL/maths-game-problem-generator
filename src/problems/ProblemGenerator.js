@@ -3,6 +3,7 @@ import AdditionProblem from './AdditionProblem.js';
 import SubtractionProblem from './SubtractionProblem.js';
 import MultiplicationProblem from './MultiplicationProblem.js';
 import DivisionProblem from './DivisionProblem.js';
+import SquaredProblem from './SquaredProblem.js';
 import { DIFFICULTY_LEVELS } from '../difficulty/DifficultyLevel.js';
 
 // Create instances of each problem type
@@ -10,7 +11,8 @@ const PROBLEM_TYPES = {
     addition: new AdditionProblem(),
     subtraction: new SubtractionProblem(),
     multiplication: new MultiplicationProblem(),
-    division: new DivisionProblem()
+    division: new DivisionProblem(),
+    squared: new SquaredProblem()
 };
 
 /**
@@ -19,22 +21,25 @@ const PROBLEM_TYPES = {
  */
 const TYPE_DISTRIBUTIONS = {
     easy: {
-        addition: 0.6,
-        subtraction: 0.4,
+        addition: 0.5,
+        subtraction: 0.3,
         multiplication: 0,
-        division: 0
+        division: 0,
+        squared: 0.2
     },
     medium: {
-        addition: 0.25,
-        subtraction: 0.25,
-        multiplication: 0.25,
-        division: 0.25
-    },
-    hard: {
         addition: 0.2,
         subtraction: 0.2,
-        multiplication: 0.4,
-        division: 0.2
+        multiplication: 0.2,
+        division: 0.2,
+        squared: 0.2
+    },
+    hard: {
+        addition: 0.15,
+        subtraction: 0.15,
+        multiplication: 0.3,
+        division: 0.2,
+        squared: 0.2
     }
 };
 

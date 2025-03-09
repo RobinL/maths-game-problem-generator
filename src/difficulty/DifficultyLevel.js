@@ -61,6 +61,10 @@ export const DIFFICULTY_LEVELS = {
             minResult: 1,
             maxResult: 5,
             allowRemainder: false
+        },
+        squared: {
+            minValue: 1,
+            maxValue: 5
         }
     }),
 
@@ -89,6 +93,10 @@ export const DIFFICULTY_LEVELS = {
             minResult: 1,
             maxResult: 10,
             allowRemainder: false
+        },
+        squared: {
+            minValue: 6,
+            maxValue: 10
         }
     }),
 
@@ -117,6 +125,10 @@ export const DIFFICULTY_LEVELS = {
             minResult: 1,
             maxResult: 12,
             allowRemainder: true
+        },
+        squared: {
+            minValue: 11,
+            maxValue: 15
         }
     })
 };

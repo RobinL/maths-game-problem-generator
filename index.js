@@ -15,6 +15,7 @@ import AdditionProblem from './src/problems/AdditionProblem.js';
 import SubtractionProblem from './src/problems/SubtractionProblem.js';
 import MultiplicationProblem from './src/problems/MultiplicationProblem.js';
 import DivisionProblem from './src/problems/DivisionProblem.js';
+import SquaredProblem from './src/problems/SquaredProblem.js';
 
 /**
  * Validate an answer for a given problem
@@ -84,6 +85,7 @@ export {
     SubtractionProblem,
     MultiplicationProblem,
     DivisionProblem,
+    SquaredProblem,
 
     // Constants
     DIFFICULTY_LEVELS,
