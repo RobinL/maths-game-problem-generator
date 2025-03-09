@@ -323,5 +323,154 @@ export const DIFFICULTY_LEVELS = {
             enabled: true,
             includeSquareAddition: true // Include addition of squares (e.g., 5² + 3²)
         }
+    }),
+
+    year7: new DifficultyLevel('year7', 60, {
+        default: {
+            minValue: 10,
+            maxValue: 999,
+            ensurePositiveResult: true,
+            maxCharacters: 8 // Ensure problems fit in 8 characters
+        },
+        addition: {
+            minValue: 100,
+            maxValue: 999, // Three-digit numbers
+            maxSum: 9999, // Ensure sums don't exceed 9999
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to two decimal places
+            maxDecimalPlaces: 2
+        },
+        subtraction: {
+            minValue: 100,
+            maxValue: 999, // Three-digit numbers
+            ensurePositiveResult: true,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to two decimal places
+            maxDecimalPlaces: 2
+        },
+        multiplication: {
+            minValue: 10,
+            maxValue: 99, // Two-digit numbers
+            restrictToEasyCalculations: true, // Focus on two-digit by one-digit
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeTwoDigitByOneDigit: true // e.g., 23 × 4
+        },
+        division: {
+            minDivisor: 2,
+            maxDivisor: 9, // Single-digit divisors
+            minResult: 10,
+            maxResult: 99, // Two-digit results
+            allowRemainder: false,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeLargerDividends: true // e.g., 126 ÷ 3
+        },
+        squared: {
+            minValue: 2,
+            maxValue: 12, // Squares up to 12²
+            enabled: true,
+            maxCharacters: 8 // Ensure problems fit in 8 characters
+        }
+    }),
+
+    year8: new DifficultyLevel('year8', 70, {
+        default: {
+            minValue: 100,
+            maxValue: 9999,
+            ensurePositiveResult: true,
+            maxCharacters: 8 // Ensure problems fit in 8 characters
+        },
+        addition: {
+            minValue: 100,
+            maxValue: 9999, // Four-digit numbers
+            restrictToEasyCalculations: true, // Focus on numbers that fit in 8 chars
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to three decimal places
+            maxDecimalPlaces: 3
+        },
+        subtraction: {
+            minValue: 100,
+            maxValue: 9999, // Four-digit numbers
+            ensurePositiveResult: true,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to three decimal places
+            maxDecimalPlaces: 3
+        },
+        multiplication: {
+            minValue: 10,
+            maxValue: 99, // Two-digit numbers
+            includeTwoDigitByTwoDigit: true, // e.g., 20 × 15
+            restrictToEasyCalculations: true, // Focus on easier calculations that fit in 8 chars
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true // Include decimal multiplication
+        },
+        division: {
+            minDivisor: 2,
+            maxDivisor: 99, // Two-digit divisors for simple cases
+            restrictToEasyCalculations: true, // Focus on easier calculations that fit in 8 chars
+            minResult: 10,
+            maxResult: 999, // Three-digit results
+            allowRemainder: false,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeLargerDividends: true // e.g., 4567 ÷ 7
+        },
+        squared: {
+            minValue: 4,
+            maxValue: 15, // Squares up to 15²
+            enabled: true,
+            maxCharacters: 8 // Ensure problems fit in 8 characters
+        }
+    }),
+
+    year9: new DifficultyLevel('year9', 80, {
+        default: {
+            minValue: 100,
+            maxValue: 9999,
+            ensurePositiveResult: true,
+            maxCharacters: 8 // Ensure problems fit in 8 characters
+        },
+        addition: {
+            minValue: 100,
+            maxValue: 9999, // Four-digit numbers
+            restrictToEasyCalculations: true, // Focus on numbers that fit in 8 chars
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to four decimal places
+            maxDecimalPlaces: 4,
+            includeScientificNotation: true // Include scientific notation for suitable problems
+        },
+        subtraction: {
+            minValue: 100,
+            maxValue: 9999, // Four-digit numbers
+            ensurePositiveResult: true,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Handle decimals with up to four decimal places
+            maxDecimalPlaces: 4,
+            includeScientificNotation: true, // Include scientific notation for suitable problems
+            includeNegativeNumbers: true // Include negative numbers in subtraction
+        },
+        multiplication: {
+            minValue: 10,
+            maxValue: 999, // Three-digit numbers
+            restrictToEasyCalculations: true, // Focus on easier calculations that fit in 8 chars
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeDecimals: true, // Include decimal multiplication
+            includeThreeDigitByOneDigit: true // e.g., 123 × 4
+        },
+        division: {
+            minDivisor: 10,
+            maxDivisor: 99, // Two-digit divisors
+            restrictToEasyCalculations: true, // Focus on easier calculations that fit in 8 chars
+            minResult: 10,
+            maxResult: 999, // Three-digit results
+            allowRemainder: true, // Allow remainders at this level
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeLargerDividends: true // e.g., 200 ÷ 25
+        },
+        squared: {
+            minValue: 5,
+            maxValue: 15, // Squares up to 15²
+            enabled: true,
+            maxCharacters: 8, // Ensure problems fit in 8 characters
+            includeCubes: true // Include cube numbers up to 5³
+        }
     })
 };

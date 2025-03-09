@@ -30,39 +30,37 @@ export default class DivisionProblem extends ProblemType {
      * @param {boolean} params.avoidTrivial - Whether to avoid trivial problems like 2÷2
      * @param {boolean} params.ensureAccurateDecimals - Whether to ensure decimal results are accurate
      * @param {number} params.maxDividend - Maximum value for dividend
+     * @param {number} params.maxCharacters - Maximum number of characters for the expression
      * @returns {Object} Problem with expression and answer
      */
     generate(params) {
         let divisor, dividend, result;
         let expression, answer;
 
+        // Adjust minDivisor if avoidTrivial is set to avoid 1÷1 problems
+        const effectiveMinDivisor = params.avoidTrivial ? Math.max(params.minDivisor, 2) : params.minDivisor;
+
         // Handle halving problems (for Reception and Year 1)
         if (params.isHalving) {
-            // Generate an even number to halve within the specified range
-            // For Reception, focus on halving numbers up to 10
-            // For Year 1, focus on halving numbers up to 10
-            const maxDividend = params.maxDividend || 10;
+            // For Reception and Year 1, focus on halving small even numbers
+            // Generate an even number to halve
+            const evenNumber = this._getRandomInt(
+                Math.max(2, params.minResult * 2),
+                Math.min(params.maxDividend || 20, params.maxResult * 2)
+            ) * 2;
 
-            // Generate an even number within the range
-            const evenNumbers = [];
-            for (let i = 2; i <= maxDividend; i += 2) {
-                evenNumbers.push(i);
+            expression = `half ${evenNumber}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                expression = `${evenNumber}÷2`;
             }
 
-            if (evenNumbers.length === 0) {
-                // Fallback if no even numbers in range
-                dividend = 4;
-            } else {
-                dividend = evenNumbers[Math.floor(Math.random() * evenNumbers.length)];
-            }
-
-            expression = `Half of ${dividend}`;
-            answer = dividend / 2;
-
+            answer = evenNumber / 2;
             return {
                 expression,
                 answer,
-                operands: [dividend]
+                operands: [evenNumber]
             };
         }
 
@@ -135,7 +133,6 @@ export default class DivisionProblem extends ProblemType {
         }
 
         // Adjust minDivisor and minResult if avoidTrivial is set to avoid 2÷2 problems
-        const effectiveMinDivisor = params.avoidTrivial ? Math.max(params.minDivisor, 3) : params.minDivisor;
         const effectiveMinResult = params.avoidTrivial ? Math.max(params.minResult, 2) : params.minResult;
 
         // Handle larger dividends (for Year 4, 5, and 6)
@@ -232,10 +229,29 @@ export default class DivisionProblem extends ProblemType {
             dividend = this._getRandomInt(minDividend, maxDividend);
         }
 
+        // After generating the expression, check if it fits within maxCharacters
+        expression = `${dividend} ${this.symbol} ${divisor}`;
+        if (params.maxCharacters && expression.length > params.maxCharacters) {
+            // Try to simplify the expression by removing spaces
+            expression = `${dividend}${this.symbol}${divisor}`;
+
+            // If still too long, try to regenerate with smaller numbers
+            if (expression.length > params.maxCharacters) {
+                const adjustedParams = { ...params };
+
+                // Adjust parameters to generate smaller problems
+                if (params.includeLargerDividends) {
+                    adjustedParams.maxResult = Math.min(params.maxResult, 50);
+                }
+
+                // Recursively try again with adjusted parameters
+                return this.generate(adjustedParams);
+            }
+        }
+
         return {
-            expression: `${dividend} ${this.symbol} ${divisor}`,
-            // If remainders are allowed, we might want to return the full answer
-            answer: params.allowRemainder ? parseFloat((dividend / divisor).toFixed(2)) : result,
+            expression,
+            answer,
             operands: [dividend, divisor]
         };
     }

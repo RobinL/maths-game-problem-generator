@@ -26,8 +26,10 @@ export default class MultiplicationProblem extends ProblemType {
      * @param {boolean} params.includeDoubleDigit - Whether to include double-digit multiplication
      * @param {boolean} params.includeTwoDigitByOneDigit - Whether to include two-digit by one-digit
      * @param {boolean} params.includeTwoDigitByTwoDigit - Whether to include two-digit by two-digit
+     * @param {boolean} params.includeThreeDigitByOneDigit - Whether to include three-digit by one-digit
      * @param {boolean} params.includeDecimals - Whether to include decimal multiplication
      * @param {boolean} params.avoidTrivial - Whether to avoid trivial problems like 1×1
+     * @param {number} params.maxCharacters - Maximum number of characters for the expression
      * @returns {Object} Problem with expression and answer
      */
     generate(params) {
@@ -42,7 +44,13 @@ export default class MultiplicationProblem extends ProblemType {
             // For Reception, focus on doubling numbers 2-5
             // For Year 1, focus on doubling numbers 2-10
             a = this._getRandomInt(effectiveMinValue, params.maxValue);
-            expression = `Double ${a}`;
+            expression = `dbl ${a}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                expression = `2×${a}`;
+            }
+
             answer = a * 2;
             return {
                 expression,
@@ -211,6 +219,28 @@ export default class MultiplicationProblem extends ProblemType {
             };
         }
 
+        // Handle three-digit by one-digit multiplication (for Year 9)
+        if (params.includeThreeDigitByOneDigit && Math.random() < 0.3) {
+            a = this._getRandomInt(100, Math.min(params.maxValue, 999));
+            b = this._getRandomInt(effectiveMinValue, 9);
+
+            expression = `${a} ${this.symbol} ${b}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                // Try with a smaller three-digit number
+                a = this._getRandomInt(100, 299);
+                expression = `${a}${this.symbol}${b}`;
+            }
+
+            answer = a * b;
+            return {
+                expression,
+                answer,
+                operands: [a, b]
+            };
+        }
+
         // Standard random generation for other cases
         if (params.restrictToTables && params.restrictToTables.length > 0) {
             // Use one operand from the specified times tables
@@ -228,9 +258,26 @@ export default class MultiplicationProblem extends ProblemType {
             b = this._getRandomInt(effectiveMinValue, params.maxValue);
         }
 
+        // After generating the expression, check if it fits within maxCharacters
+        expression = `${a} ${this.symbol} ${b}`;
+        if (params.maxCharacters && expression.length > params.maxCharacters) {
+            // Try to simplify the expression by removing spaces
+            expression = `${a}${this.symbol}${b}`;
+
+            // If still too long, try to regenerate with smaller numbers
+            if (expression.length > params.maxCharacters) {
+                const adjustedParams = { ...params };
+                adjustedParams.maxValue = Math.min(params.maxValue, 99);
+
+                // Recursively try again with adjusted parameters
+                return this.generate(adjustedParams);
+            }
+        }
+
+        answer = a * b;
         return {
-            expression: `${a} ${this.symbol} ${b}`,
-            answer: a * b,
+            expression,
+            answer,
             operands: [a, b]
         };
     }

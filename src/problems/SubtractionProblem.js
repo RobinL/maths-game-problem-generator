@@ -18,12 +18,16 @@ export default class SubtractionProblem extends ProblemType {
      * @param {Object} params - Parameters defining difficulty
      * @param {number} params.minValue - Minimum value for operands
      * @param {number} params.maxValue - Maximum value for operands
-     * @param {boolean} params.ensurePositiveResult - Whether to ensure positive results
+     * @param {boolean} params.ensurePositiveResult - Whether to ensure the result is positive
      * @param {number} params.restrictToMultiplesOf - Restrict operands to multiples of this number
      * @param {boolean} params.noBorrowing - Whether to ensure no borrowing is needed (for easier mental math)
      * @param {boolean} params.restrictToEasyCalculations - Restrict to subtractions that are easy to calculate mentally
      * @param {boolean} params.includeDecimals - Whether to include decimal subtraction
      * @param {boolean} params.includePercentages - Whether to include percentage calculations
+     * @param {number} params.maxCharacters - Maximum number of characters for the expression
+     * @param {number} params.maxDecimalPlaces - Maximum number of decimal places
+     * @param {boolean} params.includeScientificNotation - Whether to include scientific notation
+     * @param {boolean} params.includeNegativeNumbers - Whether to include negative numbers
      * @returns {Object} Problem with expression and answer
      */
     generate(params) {
@@ -32,26 +36,74 @@ export default class SubtractionProblem extends ProblemType {
 
         // Handle percentage calculations (for Year 6)
         if (params.includePercentages) {
-            // Generate problems like "What is 200 minus 15% of 200?"
-            const percentages = [10, 15, 20, 25, 50];
+            // Generate percentage problems like "What is 20% less than 100?"
+            const percentages = [10, 15, 20, 25, 50, 75];
             const percentage = percentages[Math.floor(Math.random() * percentages.length)];
 
             // Generate a number that's easy to calculate the percentage of
             const base = this._getRandomInt(1, 20) * 10; // Multiples of 10 up to 200
 
-            // For Year 6, include specific examples like "130 - 25% of 130"
-            if (Math.random() < 0.3) {
-                expression = `130 - 25% of 130`;
-                answer = 130 - (25 / 100) * 130;
-            } else {
-                expression = `${base} - ${percentage}% of ${base}`;
-                answer = base - ((percentage / 100) * base);
+            expression = `${base}-${percentage}%`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                // Simplify to fit within character limit
+                expression = `${base}-${percentage}%`;
             }
+
+            answer = base - ((percentage / 100) * base);
 
             return {
                 expression,
                 answer,
                 operands: [base, percentage]
+            };
+        }
+
+        // Handle scientific notation (for Year 9)
+        if (params.includeScientificNotation && Math.random() < 0.3) {
+            // Generate scientific notation problems like "2.5×10³-1.5×10³"
+            const exponent = this._getRandomInt(1, 3);
+            const base1 = this._getRandomDecimal(1.5, 9.9, 1);
+            const base2 = this._getRandomDecimal(1, base1 - 0.5, 1);
+
+            expression = `${base1}×10^${exponent}-${base2}×10^${exponent}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                // Simplify to fit within character limit
+                expression = `${base1}E${exponent}-${base2}E${exponent}`;
+            }
+
+            answer = (base1 * Math.pow(10, exponent)) - (base2 * Math.pow(10, exponent));
+
+            return {
+                expression,
+                answer,
+                operands: [base1 * Math.pow(10, exponent), base2 * Math.pow(10, exponent)]
+            };
+        }
+
+        // Handle negative numbers (for Year 9)
+        if (params.includeNegativeNumbers && Math.random() < 0.3) {
+            // Generate problems with negative numbers like "5-10" or "-5-3"
+            if (Math.random() < 0.5) {
+                // First operand is positive, second is larger (result will be negative)
+                a = this._getRandomInt(1, 20);
+                b = this._getRandomInt(a + 1, a + 20);
+            } else {
+                // First operand is negative
+                a = -this._getRandomInt(1, 10);
+                b = this._getRandomInt(1, 10);
+            }
+
+            expression = `${a}${this.symbol}${b}`;
+            answer = a - b;
+
+            return {
+                expression,
+                answer,
+                operands: [a, b]
             };
         }
 
@@ -251,9 +303,30 @@ export default class SubtractionProblem extends ProblemType {
             b = this._getRandomInt(params.minValue, params.maxValue);
         }
 
+        // After generating the expression, check if it fits within maxCharacters
+        expression = `${a} ${this.symbol} ${b}`;
+        if (params.maxCharacters && expression.length > params.maxCharacters) {
+            // Try to simplify the expression by removing spaces
+            expression = `${a}${this.symbol}${b}`;
+
+            // If still too long, try to regenerate with smaller numbers
+            if (expression.length > params.maxCharacters) {
+                const adjustedParams = { ...params };
+                adjustedParams.maxValue = Math.min(params.maxValue, 99);
+
+                // If still using decimals, reduce decimal places
+                if (params.includeDecimals) {
+                    adjustedParams.maxDecimalPlaces = Math.min(params.maxDecimalPlaces || 2, 1);
+                }
+
+                // Recursively try again with adjusted parameters
+                return this.generate(adjustedParams);
+            }
+        }
+
         return {
-            expression: `${a} ${this.symbol} ${b}`,
-            answer: a - b,
+            expression,
+            answer,
             operands: [a, b]
         };
     }
@@ -269,5 +342,17 @@ export default class SubtractionProblem extends ProblemType {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Generate a random decimal number
+     * @param {number} min - Minimum value
+     * @param {number} max - Maximum value
+     * @param {number} decimalPlaces - Number of decimal places
+     * @returns {number} Random decimal number
+     */
+    _getRandomDecimal(min, max, decimalPlaces) {
+        const rand = Math.random() * (max - min) + min;
+        return Number(rand.toFixed(decimalPlaces));
     }
 }

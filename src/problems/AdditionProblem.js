@@ -24,6 +24,9 @@ export default class AdditionProblem extends ProblemType {
      * @param {boolean} params.restrictToEasyCalculations - Restrict to additions that are easy to calculate mentally
      * @param {boolean} params.includeDecimals - Whether to include decimal addition
      * @param {boolean} params.includePercentages - Whether to include percentage calculations
+     * @param {number} params.maxCharacters - Maximum number of characters for the expression
+     * @param {number} params.maxDecimalPlaces - Maximum number of decimal places
+     * @param {boolean} params.includeScientificNotation - Whether to include scientific notation
      * @returns {Object} Problem with expression and answer
      */
     generate(params) {
@@ -40,6 +43,13 @@ export default class AdditionProblem extends ProblemType {
             const base = this._getRandomInt(1, 20) * 10; // Multiples of 10 up to 200
 
             expression = `${percentage}% of ${base}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                // Simplify to fit within character limit
+                expression = `${percentage}%×${base}`;
+            }
+
             answer = (percentage / 100) * base;
 
             return {
@@ -278,9 +288,48 @@ export default class AdditionProblem extends ProblemType {
             b = this._getRandomInt(params.minValue, params.maxValue);
         }
 
+        // Handle scientific notation (for Year 9)
+        if (params.includeScientificNotation && Math.random() < 0.3) {
+            // Generate scientific notation problems like "2.5×10³+1.5×10³"
+            const exponent = this._getRandomInt(1, 3);
+            const base1 = this._getRandomDecimal(1, 9.9, 1);
+            const base2 = this._getRandomDecimal(1, 9.9, 1);
+
+            expression = `${base1}×10^${exponent}+${base2}×10^${exponent}`;
+
+            // Check if the expression fits within maxCharacters
+            if (params.maxCharacters && expression.length > params.maxCharacters) {
+                // Simplify to fit within character limit
+                expression = `${base1}E${exponent}+${base2}E${exponent}`;
+            }
+
+            answer = (base1 * Math.pow(10, exponent)) + (base2 * Math.pow(10, exponent));
+
+            return {
+                expression,
+                answer,
+                operands: [base1 * Math.pow(10, exponent), base2 * Math.pow(10, exponent)]
+            };
+        }
+
+        // After generating the expression, check if it fits within maxCharacters
+        if (params.maxCharacters && expression.length > params.maxCharacters) {
+            // Try to regenerate with smaller numbers
+            const adjustedParams = { ...params };
+            adjustedParams.maxValue = Math.min(params.maxValue, 99);
+
+            // If still using decimals, reduce decimal places
+            if (params.includeDecimals) {
+                adjustedParams.maxDecimalPlaces = Math.min(params.maxDecimalPlaces || 2, 1);
+            }
+
+            // Recursively try again with adjusted parameters
+            return this.generate(adjustedParams);
+        }
+
         return {
-            expression: `${a} ${this.symbol} ${b}`,
-            answer: a + b,
+            expression,
+            answer,
             operands: [a, b]
         };
     }
@@ -296,5 +345,17 @@ export default class AdditionProblem extends ProblemType {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Generate a random decimal number
+     * @param {number} min - Minimum value
+     * @param {number} max - Maximum value
+     * @param {number} decimalPlaces - Number of decimal places
+     * @returns {number} Random decimal number
+     */
+    _getRandomDecimal(min, max, decimalPlaces) {
+        const rand = Math.random() * (max - min) + min;
+        return Number(rand.toFixed(decimalPlaces));
     }
 }

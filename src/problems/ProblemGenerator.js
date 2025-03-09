@@ -68,6 +68,27 @@ const TYPE_DISTRIBUTIONS = {
         multiplication: 0.2, // Mental multiplication with easy numbers
         division: 0.2,      // Mental division with easy numbers
         squared: 0.2        // Recall square numbers up to 12²
+    },
+    year7: {
+        addition: 0.2,      // Three-digit sums and decimals with up to two places
+        subtraction: 0.2,   // Three-digit differences and decimals with up to two places
+        multiplication: 0.2, // Two-digit by one-digit multiplication
+        division: 0.2,      // Three-digit by one-digit division
+        squared: 0.2        // Square numbers up to 12²
+    },
+    year8: {
+        addition: 0.2,      // Four-digit sums and decimals with up to three places
+        subtraction: 0.2,   // Four-digit differences and decimals with up to three places
+        multiplication: 0.2, // Two-digit by two-digit multiplication
+        division: 0.2,      // Four-digit by one-digit division
+        squared: 0.2        // Square numbers up to 15²
+    },
+    year9: {
+        addition: 0.2,      // Four-digit sums, decimals with up to four places, scientific notation
+        subtraction: 0.2,   // Four-digit differences, decimals with up to four places, scientific notation
+        multiplication: 0.2, // Three-digit by one-digit multiplication
+        division: 0.2,      // Division with two-digit divisors
+        squared: 0.2        // Square numbers up to 15² and cube numbers up to 5³
     }
 };
 
