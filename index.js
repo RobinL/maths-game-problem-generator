@@ -64,6 +64,9 @@ function validateAnswer(problem, answer) {
  * @returns {string} The problem expression
  */
 function getProblemExpression(problem) {
+    if (problem.expression.includes('undefined')) {
+        debugger;
+    }
     return problem.expression;
 }
 

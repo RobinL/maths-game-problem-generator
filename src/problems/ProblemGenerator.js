@@ -20,6 +20,20 @@ import Year2MultiplicationProblem from './year2/Year2MultiplicationProblem.js';
 import Year2DivisionProblem from './year2/Year2DivisionProblem.js';
 import Year2SquaredProblem from './year2/Year2SquaredProblem.js';
 
+// Import Year 3-specific problem classes
+import Year3AdditionProblem from './year3/Year3AdditionProblem.js';
+import Year3SubtractionProblem from './year3/Year3SubtractionProblem.js';
+import Year3MultiplicationProblem from './year3/Year3MultiplicationProblem.js';
+import Year3DivisionProblem from './year3/Year3DivisionProblem.js';
+import Year3SquaredProblem from './year3/Year3SquaredProblem.js';
+
+// Import Year 4-specific problem classes
+import Year4AdditionProblem from './year4/Year4AdditionProblem.js';
+import Year4SubtractionProblem from './year4/Year4SubtractionProblem.js';
+import Year4MultiplicationProblem from './year4/Year4MultiplicationProblem.js';
+import Year4DivisionProblem from './year4/Year4DivisionProblem.js';
+import Year4SquaredProblem from './year4/Year4SquaredProblem.js';
+
 // Import legacy problem classes (to be replaced gradually)
 import AdditionProblem from './AdditionProblem.js';
 import SubtractionProblem from './SubtractionProblem.js';
@@ -54,21 +68,23 @@ const PROBLEM_TYPE_CLASSES = {
         division: Year2DivisionProblem,
         squared: Year2SquaredProblem
     },
-    // Legacy problem types for other years (to be replaced)
+    // Year 3 problem types
     year3: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
+        addition: Year3AdditionProblem,
+        subtraction: Year3SubtractionProblem,
+        multiplication: Year3MultiplicationProblem,
+        division: Year3DivisionProblem,
+        squared: Year3SquaredProblem
     },
+    // Year 4 problem types
     year4: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
+        addition: Year4AdditionProblem,
+        subtraction: Year4SubtractionProblem,
+        multiplication: Year4MultiplicationProblem,
+        division: Year4DivisionProblem,
+        squared: Year4SquaredProblem
     },
+    // Legacy problem types for other years (to be replaced)
     year5: {
         addition: AdditionProblem,
         subtraction: SubtractionProblem,
@@ -270,7 +286,7 @@ function getAvailableProblemTypes() {
  * @returns {Array<string>} List of available difficulty levels
  */
 function getAvailableDifficultyLevels() {
-    return Object.keys(DIFFICULTY_LEVELS);
+    return ['reception', 'year1', 'year2', 'year3', 'year4'];
 }
 
 export {

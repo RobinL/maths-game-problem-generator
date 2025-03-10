@@ -40,6 +40,16 @@
             /* Light orange */
         }
 
+        .year3 {
+            background-color: #f3e5f5;
+            /* Light purple */
+        }
+
+        .year4 {
+            background-color: #e0f7fa;
+            /* Light cyan */
+        }
+
         .problem {
             font-size: 18px;
             margin: 10px 0;
@@ -94,12 +104,14 @@
 
 <body>
     <h1>Math Problem Generator Demo</h1>
-    <p>This demo showcases the year-specific problem classes for Reception, Year 1, and Year 2.</p>
+    <p>This demo showcases the year-specific problem classes for Reception, Year 1, Year 2, Year 3, and Year 4.</p>
 
     <div class="year-controls">
         <button id="year-reception" class="year-button active">Reception (Ages 4-5)</button>
         <button id="year-year1" class="year-button">Year 1 (Ages 5-6)</button>
         <button id="year-year2" class="year-button">Year 2 (Ages 6-7)</button>
+        <button id="year-year3" class="year-button">Year 3 (Ages 7-8)</button>
+        <button id="year-year4" class="year-button">Year 4 (Ages 8-9)</button>
     </div>
 
     <div class="controls">
@@ -135,6 +147,22 @@
         <p>Focus: Addition and subtraction facts up to 20 and derived facts to 100, recall of 2, 5, and 10 times tables
             and related division facts</p>
         <div id="year2-problems"></div>
+    </div>
+
+    <!-- Year 3 Problems -->
+    <div class="problem-section year3">
+        <h3>Year 3 (Ages 7-8)</h3>
+        <p>Focus: Mental addition and subtraction with three-digit numbers, memorizing 3, 4, and 8 times tables, and
+            related division facts</p>
+        <div id="year3-problems"></div>
+    </div>
+
+    <!-- Year 4 Problems -->
+    <div class="problem-section year4">
+        <h3>Year 4 (Ages 8-9)</h3>
+        <p>Focus: Number bonds to 100 and 1000, decimal addition and subtraction, mastery of all times tables up to
+            12×12, and factor pairs</p>
+        <div id="year4-problems"></div>
     </div>
 
     <!-- By Type -->
@@ -190,6 +218,16 @@
                 generateAllProblems();
             });
 
+            document.getElementById('year-year3').addEventListener('click', () => {
+                setActiveYear('year3');
+                generateAllProblems();
+            });
+
+            document.getElementById('year-year4').addEventListener('click', () => {
+                setActiveYear('year4');
+                generateAllProblems();
+            });
+
             // Set up operation type event listeners
             document.getElementById('generate-all').addEventListener('click', generateAllProblems);
             document.getElementById('generate-addition').addEventListener('click', () => generateByType('addition'));
@@ -206,14 +244,18 @@
             document.getElementById('year-reception').classList.remove('active');
             document.getElementById('year-year1').classList.remove('active');
             document.getElementById('year-year2').classList.remove('active');
+            document.getElementById('year-year3').classList.remove('active');
+            document.getElementById('year-year4').classList.remove('active');
             document.getElementById(`year-${year}`).classList.add('active');
         }
 
         function generateAllProblems() {
-            // Generate by difficulty (Reception, Year 1, and Year 2)
-            generateProblemsOfDifficulty('reception', 4);
-            generateProblemsOfDifficulty('year1', 4);
-            generateProblemsOfDifficulty('year2', 4);
+            // Generate by difficulty (Reception, Year 1, Year 2, Year 3, and Year 4)
+            generateProblemsOfDifficulty('reception', 10);
+            generateProblemsOfDifficulty('year1', 10);
+            generateProblemsOfDifficulty('year2', 10);
+            generateProblemsOfDifficulty('year3', 10);
+            generateProblemsOfDifficulty('year4', 10);
 
             // Generate by type for the currently selected year
             generateProblemsOfType('addition', 5);
@@ -292,6 +334,7 @@
             // Fix for multiplication and division symbols
             // If the expression contains 'undefined', replace it with the proper symbol
             if (expression && expression.includes('undefined')) {
+                debugger;
                 if (problem.type === 'multiplication') {
                     expression = expression.replace('undefined', '×');
                 } else if (problem.type === 'division') {
