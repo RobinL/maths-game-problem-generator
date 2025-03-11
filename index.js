@@ -8,52 +8,34 @@
 import {
     createMathProblem,
     getAvailableProblemTypes,
-    getAvailableDifficultyLevels,
-    DIFFICULTY_LEVELS
+    getAvailableDifficultyLevels
 } from './src/problems/ProblemGenerator.js';
 
 /**
  * Generate a single math problem
- * @param {string} yearLevel - School year level ('reception', 'year1', 'year2', etc.)
- * @param {string} [problemType] - Optional problem type ('addition', 'subtraction', etc.)
+ * @param {Object} options - Options for problem generation
+ * @param {string} [options.yearLevel='reception'] - School year level (see YEAR_LEVELS for options)
+ * @param {string} [options.type=null] - Optional problem type (see PROBLEM_TYPES for options)
  * @returns {Object} Math problem with expression and answer
  */
-function generateProblem(yearLevel = 'reception', problemType = null) {
-    const problem = createMathProblem(yearLevel, problemType);
+function generateProblem(options = {}) {
+    const yearLevel = options.yearLevel || 'reception';
+    const type = options.type || null;
+
+    const problem = createMathProblem(yearLevel, type);
+
     return {
         expression: problem.expression,
         answer: problem.answer,
-        type: problem.type || problemType || 'unknown',
-        yearLevel: yearLevel,
-        points: problem.getPoints ? problem.getPoints() : DIFFICULTY_LEVELS[yearLevel].points
+        type: problem.type || type || 'unknown',
+        yearLevel: yearLevel
     };
 }
 
 /**
- * Generate multiple math problems
- * @param {Object} options - Generation options
- * @param {string} [options.yearLevel='reception'] - School year level
- * @param {string} [options.problemType=null] - Problem type (if null, will generate a mix)
- * @param {number} [options.count=5] - Number of problems to generate
- * @returns {Array<Object>} Array of math problems
- */
-function generateProblems(options = {}) {
-    const {
-        yearLevel = 'reception',
-        problemType = null,
-        count = 5
-    } = options;
-
-    const problems = [];
-    for (let i = 0; i < count; i++) {
-        problems.push(generateProblem(yearLevel, problemType));
-    }
-    return problems;
-}
-
-/**
- * Check if a user's answer is correct
- * @param {Object} problem - The problem object
+ * Check if a user's answer is correct for a given problem
+ *
+ * @param {Object} problem - The problem object returned by generateProblem
  * @param {number|string} userAnswer - The user's answer (can be number or string)
  * @returns {boolean} Whether the answer is correct
  */
@@ -72,36 +54,55 @@ function checkAnswer(problem, userAnswer) {
 }
 
 /**
- * Get all available difficulty levels
- * @returns {Array<string>} Array of available difficulty levels
+ * Get all available year levels supported by the generator
+ *
+ * @returns {Array<string>} List of available year levels
  */
-function getAvailableLevels() {
+function getYearLevels() {
     return getAvailableDifficultyLevels();
 }
 
 /**
- * Get all available problem types
- * @returns {Array<string>} Array of available problem types
+ * Get all available problem types supported by the generator
+ *
+ * @returns {Array<string>} List of available problem types
  */
-function getAvailableTypes() {
+function getProblemTypes() {
     return getAvailableProblemTypes();
 }
+
+// Create constants for easier reference, but dynamically
+// generate them to avoid hardcoding
+const YEAR_LEVELS = getYearLevels().reduce((acc, level) => {
+    // Convert 'year1' to 'YEAR1', 'reception' to 'RECEPTION'
+    const constant = level.toUpperCase();
+    acc[constant] = level;
+    return acc;
+}, {});
+
+const PROBLEM_TYPES = getProblemTypes().reduce((acc, type) => {
+    // Convert 'addition' to 'ADDITION'
+    const constant = type.toUpperCase();
+    acc[constant] = type;
+    return acc;
+}, {});
 
 // Export the public API
 export {
     generateProblem,
-    generateProblems,
     checkAnswer,
-    getAvailableLevels,
-    getAvailableTypes,
-    DIFFICULTY_LEVELS
+    getYearLevels,
+    getProblemTypes,
+    YEAR_LEVELS,
+    PROBLEM_TYPES
 };
 
-// Default export for convenience
+// Default export
 export default {
-    generate: generateProblem,
-    generateMany: generateProblems,
-    check: checkAnswer,
-    levels: getAvailableLevels,
-    types: getAvailableTypes
+    generateProblem,
+    checkAnswer,
+    getYearLevels,
+    getProblemTypes,
+    yearLevels: YEAR_LEVELS,
+    problemTypes: PROBLEM_TYPES
 };
