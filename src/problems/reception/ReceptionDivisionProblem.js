@@ -13,6 +13,7 @@ export default class ReceptionDivisionProblem extends BaseDivisionProblem {
         super(DIFFICULTY_LEVELS.reception);
         // Override the symbol to indicate this is halving
         this.symbol = '÷';
+        this.generate()
     }
 
 

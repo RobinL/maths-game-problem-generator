@@ -9,7 +9,7 @@ export default class BaseMathProblem {
     constructor(difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
         this.problemDetails = null;
-        this.generate();
+
     }
 
     /**

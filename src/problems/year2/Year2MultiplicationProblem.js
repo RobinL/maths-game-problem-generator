@@ -10,6 +10,7 @@ export default class Year2MultiplicationProblem extends BaseMultiplicationProble
     constructor() {
         super(DIFFICULTY_LEVELS.year2);
         this.symbol = '×';
+        this.generate()
     }
 
     generate() {

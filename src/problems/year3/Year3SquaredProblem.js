@@ -12,6 +12,7 @@ export default class Year3SquaredProblem extends BaseSquaredProblem {
 
     constructor() {
         super(DIFFICULTY_LEVELS.year3);
+        this.generate()
     }
 
     generate() {

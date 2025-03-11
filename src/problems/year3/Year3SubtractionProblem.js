@@ -9,6 +9,7 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
 
     constructor() {
         super(DIFFICULTY_LEVELS.year3);
+        this.generate()
     }
 
     generate() {

@@ -115,48 +115,7 @@ const TYPE_DISTRIBUTIONS = {
         division: 0.2,      // Division with 2, 3, 4, 5, 8, 10
         squared: 0          // Not formally taught as "squares"
     },
-    year4: {
-        addition: 0.25,     // Three-digit sums without carrying
-        subtraction: 0.25,  // Three-digit differences without borrowing
-        multiplication: 0.25, // All tables up to 12×12
-        division: 0.2,      // Division with tables up to 12
-        squared: 0.05       // Squares through times tables
-    },
-    year5: {
-        addition: 0.25,     // Two-digit sums and decimals
-        subtraction: 0.25,  // Two-digit differences and decimals
-        multiplication: 0.2, // Multiply by 10, 100
-        division: 0.2,      // Divide by 10, 100
-        squared: 0.1        // Formally introduced: squares of integers 1-12
-    },
-    year6: {
-        addition: 0.2,      // Three-digit sums if simple
-        subtraction: 0.2,   // Three-digit differences if simple
-        multiplication: 0.2, // Mental multiplication with easy numbers
-        division: 0.2,      // Mental division with easy numbers
-        squared: 0.2        // Recall square numbers up to 12²
-    },
-    year7: {
-        addition: 0.2,      // Three-digit sums and decimals with up to two places
-        subtraction: 0.2,   // Three-digit differences and decimals with up to two places
-        multiplication: 0.2, // Two-digit by one-digit multiplication
-        division: 0.2,      // Three-digit by one-digit division
-        squared: 0.2        // Square numbers up to 12²
-    },
-    year8: {
-        addition: 0.2,      // Four-digit sums and decimals with up to three places
-        subtraction: 0.2,   // Four-digit differences and decimals with up to three places
-        multiplication: 0.2, // Two-digit by two-digit multiplication
-        division: 0.2,      // Four-digit by one-digit division
-        squared: 0.2        // Square numbers up to 15²
-    },
-    year9: {
-        addition: 0.2,      // Four-digit sums, decimals with up to four places, scientific notation
-        subtraction: 0.2,   // Four-digit differences, decimals with up to four places, scientific notation
-        multiplication: 0.2, // Three-digit by one-digit multiplication
-        division: 0.2,      // Division with two-digit divisors
-        squared: 0.2        // Square numbers up to 15² and cube numbers up to 5³
-    }
+
 };
 
 /**

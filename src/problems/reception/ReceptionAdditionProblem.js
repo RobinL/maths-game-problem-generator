@@ -9,6 +9,7 @@ export default class ReceptionAdditionProblem extends BaseAdditionProblem {
 
     constructor() {
         super(DIFFICULTY_LEVELS.reception);
+        this.generate()
     }
 
     generate() {

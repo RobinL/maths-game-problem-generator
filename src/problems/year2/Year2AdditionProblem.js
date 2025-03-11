@@ -9,6 +9,7 @@ export default class Year2AdditionProblem extends BaseAdditionProblem {
 
     constructor() {
         super(DIFFICULTY_LEVELS.year2);
+        this.generate()
     }
 
     generate() {

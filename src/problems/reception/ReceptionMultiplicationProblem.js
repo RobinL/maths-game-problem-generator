@@ -11,6 +11,7 @@ export default class ReceptionMultiplicationProblem extends BaseMultiplicationPr
         super(DIFFICULTY_LEVELS.reception);
 
         this.symbol = '×';
+        this.generate()
     }
 
 

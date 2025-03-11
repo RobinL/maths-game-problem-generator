@@ -10,6 +10,7 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
     constructor() {
         super(DIFFICULTY_LEVELS.year1);
         this.symbol = '÷';
+        this.generate()
     }
 
     generate() {
