@@ -9,7 +9,6 @@ export default class BaseMathProblem {
     constructor(difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
         this.problemDetails = null;
-
     }
 
     /**
@@ -20,19 +19,52 @@ export default class BaseMathProblem {
     }
 
     /**
-     * Get the problem expression
+     * Get the problem expression with properly formatted numbers
      * @returns {string} The formatted expression
      */
     get expression() {
-        return this.problemDetails?.expression || '';
+        if (!this.problemDetails?.expression) return '';
+
+        // Replace any numbers in the expression with their formatted versions
+        return this.problemDetails.expression.replace(/[-+]?\d+(\.\d+)?/g, match => {
+            const num = parseFloat(match);
+            if (Number.isInteger(num)) return num.toString();
+            return this._formatNumber(num);
+        });
     }
 
     /**
-     * Get the correct answer
-     * @returns {number} The answer
+     * Get the correct answer with proper formatting
+     * @returns {number} The answer (original numeric value)
      */
     get answer() {
         return this.problemDetails?.answer || 0;
+    }
+
+    /**
+     * Get the formatted string representation of the answer
+     * @returns {string} The formatted answer
+     */
+    get formattedAnswer() {
+        return this._formatNumber(this.answer);
+    }
+
+    /**
+     * Format a number to avoid floating-point precision issues
+     * @param {number} value - The number to format
+     * @param {number} [precision=10] - Maximum decimal places to show
+     * @returns {string} Formatted number string
+     * @private
+     */
+    _formatNumber(value, precision = 10) {
+        if (typeof value !== 'number') return String(value);
+
+        // Return integers as-is
+        if (Number.isInteger(value)) return value.toString();
+
+        // Round to avoid floating-point issues
+        // Using a maximum precision but trimming trailing zeros
+        return parseFloat(value.toFixed(precision)).toString();
     }
 
     /**
@@ -41,21 +73,17 @@ export default class BaseMathProblem {
      * @returns {boolean} Whether the answer is correct
      */
     validate(userAnswer) {
-        const isCorrect = userAnswer === this.answer;
+        // Convert string answers to numbers if needed
+        const numericAnswer = typeof userAnswer === 'string'
+            ? parseFloat(userAnswer)
+            : userAnswer;
 
-        // Debug logging
-        console.log('------- Answer Validation -------');
-        console.log(`Problem: ${this.expression} = ?`);
-        console.log(`User answer: ${userAnswer} (${typeof userAnswer})`);
-        console.log(`Correct answer: ${this.answer} (${typeof this.answer})`);
-        console.log(`Result: ${isCorrect ? '✅ Correct' : '❌ Incorrect'}`);
-
-        // Check for potential issues
-        if (!isCorrect && Math.abs(userAnswer - this.answer) < 0.0001) {
-            console.log('⚠️ Very close! Possible floating-point precision issue.');
+        // Handle potential floating point issues
+        if (typeof this.answer === 'number' && typeof numericAnswer === 'number') {
+            return Math.abs(this.answer - numericAnswer) < 0.0001;
         }
 
-        return isCorrect;
+        return this.answer === numericAnswer;
     }
 
     /**

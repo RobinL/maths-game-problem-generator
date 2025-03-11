@@ -133,7 +133,12 @@
 
     <script type="module">
         // Import directly from the package's main entry point
-        import { generateProblems } from '../index.js';
+        import {
+            generateProblem,
+            checkAnswer,
+            getYearLevels,
+            getProblemTypes
+        } from '../index.js';
 
         // Year level configurations
         const yearLevels = [
@@ -193,7 +198,8 @@
 
                 const answerSpan = document.createElement('span');
                 answerSpan.className = 'answer';
-                answerSpan.textContent = `[answer=${problem.answer}]`;
+                // Use formattedAnswer instead of raw answer for display
+                answerSpan.textContent = `[answer=${problem.formattedAnswer || problem.answer}]`;
 
                 problemDiv.appendChild(typeSpan);
                 problemDiv.appendChild(expressionSpan);
@@ -205,13 +211,17 @@
 
         // Function to generate problems
         function generateProblemSet(yearLevel, problemType, containerId) {
-            const options = {
-                yearLevel: yearLevel,
-                problemType: problemType,
-                count: 5
-            };
+            // Using new API - manually generate 5 problems
+            const problems = [];
 
-            const problems = generateProblems(options);
+            for (let i = 0; i < 5; i++) {
+                const problem = generateProblem({
+                    yearLevel: yearLevel,
+                    type: problemType
+                });
+                problems.push(problem);
+            }
+
             displayProblems(problems, containerId);
 
             // Update active button

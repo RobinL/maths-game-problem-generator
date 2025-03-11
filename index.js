@@ -27,6 +27,8 @@ function generateProblem(options = {}) {
     return {
         expression: problem.expression,
         answer: problem.answer,
+        // Use the formatted answer string for display purposes
+        formattedAnswer: problem.formattedAnswer,
         type: problem.type || type || 'unknown',
         yearLevel: yearLevel
     };
