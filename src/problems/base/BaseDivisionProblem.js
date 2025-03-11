@@ -31,4 +31,16 @@ export default class BaseDivisionProblem extends BaseMathProblem {
     formatExpression(a, b) {
         return `${a} ${this.symbol} ${b}`;
     }
+
+    /**
+     * Get the short version of the problem expression with forward slash
+     * @returns {string} The short formatted expression
+     */
+    get expression_short() {
+        // First get the standard expression_short from BaseMathProblem
+        let shortExpr = super.expression_short;
+
+        // Replace division symbol with forward slash for more compact display
+        return shortExpr.replace(this.symbol, '/');
+    }
 }

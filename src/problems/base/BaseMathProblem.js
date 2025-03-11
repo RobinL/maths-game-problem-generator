@@ -34,6 +34,15 @@ export default class BaseMathProblem {
     }
 
     /**
+     * Get the short version of the problem expression (max 9 chars)
+     * @returns {string} The short formatted expression
+     */
+    get expression_short() {
+        // Return expression_short if explicitly provided, otherwise fall back to regular expression
+        return this.problemDetails?.expression_short || this.expression;
+    }
+
+    /**
      * Get the correct answer with proper formatting
      * @returns {number} The answer (original numeric value)
      */

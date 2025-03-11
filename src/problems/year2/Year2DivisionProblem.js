@@ -52,6 +52,15 @@ export default class Year2DivisionProblem extends BaseDivisionProblem {
                     expression = `${a} ${this.symbol} ${b}`;
                 } else {
                     expression = `How many groups of ${b} in ${a}?`;
+                    // Add short expression for game blocks (max 9 chars)
+                    this.problemDetails = {
+                        expression: expression,
+                        // No need to set expression_short explicitly for standard format
+                        // The base class getter will handle the symbol replacement
+                        answer: a / b,
+                        operands: [a, b]
+                    };
+                    return; // Exit early as we've already set problemDetails
                 }
                 break;
         }

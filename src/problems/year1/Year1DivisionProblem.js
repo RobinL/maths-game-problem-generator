@@ -28,6 +28,12 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
                 b = 2;
                 a = this._getRandomInt(1, 10) * 2; // Ensure even number
                 expression = `Half of ${a}`;
+                this.problemDetails = {
+                    expression: expression,
+                    answer: a / b,
+                    operands: [a, b]
+                };
+                return; // Exit early as we've already set problemDetails
                 break;
 
             case 2: // Simple division by 2 (sharing between 2)
@@ -40,13 +46,15 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
                 b = this._getRandomInt(2, 5);
                 a = b * this._getRandomInt(1, 4); // Ensure divisible
                 expression = `Share ${a} equally between ${b}`;
+                this.problemDetails = {
+                    expression: expression,
+                    // No need to set expression_short explicitly
+                    // The base class getter will handle the symbol replacement
+                    answer: a / b,
+                    operands: [a, b]
+                };
+                return; // Exit early as we've already set problemDetails
                 break;
         }
-
-        this.problemDetails = {
-            expression: expression,
-            answer: a / b,
-            operands: [a, b]
-        };
     }
 }

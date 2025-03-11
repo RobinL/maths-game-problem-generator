@@ -28,6 +28,7 @@ export default class ReceptionMultiplicationProblem extends BaseMultiplicationPr
         this.problemDetails = {
             // Format as "Double X" instead of "X × 2"
             expression: `Double ${a}`,
+            expression_short: `${a} ${this.symbol} ${b}`,
             answer: a * b,
             operands: [a, b]
         };

@@ -26,6 +26,7 @@ function generateProblem(options = {}) {
 
     return {
         expression: problem.expression,
+        expression_short: problem.expression_short,
         answer: problem.answer,
         // Use the formatted answer string for display purposes
         formattedAnswer: problem.formattedAnswer,

@@ -31,8 +31,9 @@ export default class ReceptionDivisionProblem extends BaseDivisionProblem {
 
 
         this.problemDetails = {
-
             expression: `Half of ${dividend}`,
+            // No need to set expression_short explicitly
+            // The base class getter will handle the symbol replacement
             answer: result,
             operands: [dividend, divisor]
         };
