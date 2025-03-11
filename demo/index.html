@@ -7,110 +7,118 @@
     <title>Math Problem Generator Demo</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            line-height: 1.6;
         }
 
         h1,
-        h2,
-        h3 {
-            color: #333;
+        h2 {
+            color: #2c3e50;
         }
 
-        .problem-section {
-            margin-bottom: 30px;
-            padding: 15px;
-            border-radius: 5px;
+        .problem-container {
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .reception {
             background-color: #e3f2fd;
-            /* Light blue */
+            border-left: 5px solid #2196f3;
         }
 
         .year1 {
-            background-color: #d4edda;
-            /* Light green */
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
         }
 
         .year2 {
-            background-color: #fff3cd;
-            /* Light yellow */
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
         }
 
         .year3 {
-            background-color: #f8d7da;
-            /* Light red */
+            background-color: #f3e5f5;
+            border-left: 5px solid #9c27b0;
         }
 
         .year4 {
-            background-color: #d1c4e9;
-            /* Light purple */
-        }
-
-        .year5 {
-            background-color: #ffccbc;
-            /* Light orange */
-        }
-
-        .year6 {
-            background-color: #c8e6c9;
-            /* Another light green */
-        }
-
-        .year7 {
-            background-color: #bbdefb;
-            /* Light blue */
-        }
-
-        .year8 {
-            background-color: #dcedc8;
-            /* Light green */
-        }
-
-        .year9 {
-            background-color: #ffecb3;
-            /* Light amber */
+            background-color: #e8eaf6;
+            border-left: 5px solid #3f51b5;
         }
 
         .problem {
-            font-size: 18px;
-            margin: 10px 0;
-            padding: 5px;
-            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+            padding: 8px;
+            margin: 6px 0;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .answer {
-            color: #666;
+        .problem span.expression {
+            font-weight: bold;
+        }
+
+        .problem span.answer {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .problem-type {
             font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
         }
 
         button {
-            padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #3498db;
             color: white;
             border: none;
+            padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
-            margin-bottom: 20px;
-            margin-right: 10px;
+            font-size: 14px;
+            margin: 5px 0;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
 
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        .description {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
             margin-bottom: 20px;
         }
 
-        .type-section {
-            margin-top: 40px;
+        .problem-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .problem-type-btn {
+            background-color: #95a5a6;
+            font-size: 13px;
+            padding: 5px 10px;
+        }
+
+        .problem-type-btn.active {
+            background-color: #16a085;
         }
     </style>
 </head>
@@ -118,200 +126,183 @@
 <body>
     <h1>Math Problem Generator Demo</h1>
 
-    <div class="controls">
-        <button id="generate-all">Generate All Problems</button>
-        <button id="generate-addition">Generate Addition</button>
-        <button id="generate-subtraction">Generate Subtraction</button>
-        <button id="generate-multiplication">Generate Multiplication</button>
-        <button id="generate-division">Generate Division</button>
-        <button id="generate-squared">Generate Squared</button>
-    </div>
-
-    <!-- By Difficulty -->
-    <h2>Problems by UK School Year Level</h2>
-    <div class="problem-section reception">
-        <h3>Reception (Ages 4-5)</h3>
-        <p>Focus: Simple counting, number bonds to 5, adding and taking away with numbers up to 10</p>
-        <div id="reception-problems"></div>
-    </div>
-
-    <div class="problem-section year1">
-        <h3>Year 1 (Ages 5-6)</h3>
-        <p>Focus: Number bonds to 10, addition and subtraction within 20, counting in 2s, 5s, 10s</p>
-        <div id="year1-problems"></div>
-    </div>
-
-    <div class="problem-section year2">
-        <h3>Year 2 (Ages 6-7)</h3>
-        <p>Focus: Addition and subtraction facts to 20, 2, 5, 10 times tables, simple division</p>
-        <div id="year2-problems"></div>
-    </div>
-
-    <div class="problem-section year3">
-        <h3>Year 3 (Ages 7-8)</h3>
-        <p>Focus: Adding/subtracting multiples of 10, 3, 4, 8 times tables, simple fractions</p>
-        <div id="year3-problems"></div>
-    </div>
-
-    <div class="problem-section year4">
-        <h3>Year 4 (Ages 8-9)</h3>
-        <p>Focus: All times tables to 12×12, three-digit calculations, multiplying by 10 and 100</p>
-        <div id="year4-problems"></div>
-    </div>
-
-    <div class="problem-section year5">
-        <h3>Year 5 (Ages 9-10)</h3>
-        <p>Focus: Two-digit calculations, multiplying/dividing by 10 and 100, square numbers</p>
-        <div id="year5-problems"></div>
-    </div>
-
-    <div class="problem-section year6">
-        <h3>Year 6 (Ages 10-11)</h3>
-        <p>Focus: Mental calculations with larger numbers, fractions, decimals, and percentages</p>
-        <div id="year6-problems"></div>
-    </div>
-
-    <div class="problem-section year7">
-        <h3>Year 7 (Ages 11-12)</h3>
-        <p>Focus: Three-digit numbers, decimals with up to two places, two-digit by one-digit multiplication</p>
-        <div id="year7-problems"></div>
-    </div>
-
-    <div class="problem-section year8">
-        <h3>Year 8 (Ages 12-13)</h3>
-        <p>Focus: Four-digit numbers, decimals with up to three places, two-digit by two-digit multiplication</p>
-        <div id="year8-problems"></div>
-    </div>
-
-    <div class="problem-section year9">
-        <h3>Year 9 (Ages 13-14)</h3>
-        <p>Focus: Scientific notation, negative numbers, three-digit by one-digit multiplication, cube numbers</p>
-        <div id="year9-problems"></div>
-    </div>
-
-    <!-- By Type -->
-    <h2 class="type-section">Problems by Type</h2>
-    <div class="problem-section" style="background-color: #e7f5fe;">
-        <h3>Addition Problems</h3>
-        <div id="addition-problems"></div>
-    </div>
-
-    <div class="problem-section" style="background-color: #f8f9fa;">
-        <h3>Subtraction Problems</h3>
-        <div id="subtraction-problems"></div>
-    </div>
-
-    <div class="problem-section" style="background-color: #f0f4c3;">
-        <h3>Multiplication Problems</h3>
-        <div id="multiplication-problems"></div>
-    </div>
-
-    <div class="problem-section" style="background-color: #e8eaf6;">
-        <h3>Division Problems</h3>
-        <div id="division-problems"></div>
-    </div>
-
-    <div class="problem-section" style="background-color: #e1bee7;">
-        <h3>Squared Problems</h3>
-        <div id="squared-problems"></div>
+    <div class="instructions">
+        <p>This demo showcases the Math Problem Generator library for UK primary school levels.</p>
+        <p>Generate problems for Reception (ages 4-5) through Year 4 (ages 8-9) levels.</p>
     </div>
 
     <script type="module">
+        // Import directly from the package's main entry point
         import {
-            createMathProblem,
-            createProblemOfType,
-            getProblemExpression,
-            getAnswer,
-            getPoints,
-            getAvailableProblemTypes,
-            getAvailableDifficultyLevels
+            generateProblem,
+            checkAnswer,
+            getYearLevels,
+            getProblemTypes
         } from '../index.js';
 
-        // Generate problems on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            generateAllProblems();
-
-            // Set up event listeners
-            document.getElementById('generate-all').addEventListener('click', generateAllProblems);
-            document.getElementById('generate-addition').addEventListener('click', () => generateByType('addition'));
-            document.getElementById('generate-subtraction').addEventListener('click', () => generateByType('subtraction'));
-            document.getElementById('generate-multiplication').addEventListener('click', () => generateByType('multiplication'));
-            document.getElementById('generate-division').addEventListener('click', () => generateByType('division'));
-            document.getElementById('generate-squared').addEventListener('click', () => generateByType('squared'));
-        });
-
-        function generateAllProblems() {
-            // Generate by difficulty
-            generateProblemsOfDifficulty('reception', 4);
-            generateProblemsOfDifficulty('year1', 4);
-            generateProblemsOfDifficulty('year2', 4);
-            generateProblemsOfDifficulty('year3', 4);
-            generateProblemsOfDifficulty('year4', 4);
-            generateProblemsOfDifficulty('year5', 4);
-            generateProblemsOfDifficulty('year6', 4);
-            generateProblemsOfDifficulty('year7', 4);
-            generateProblemsOfDifficulty('year8', 4);
-            generateProblemsOfDifficulty('year9', 4);
-
-            // Generate by type
-            generateProblemsOfType('addition', 10);
-            generateProblemsOfType('subtraction', 10);
-            generateProblemsOfType('multiplication', 10);
-            generateProblemsOfType('division', 10);
-            generateProblemsOfType('squared', 10);
-        }
-
-        function generateByType(type) {
-            generateProblemsOfType(type, 30);
-        }
-
-        function generateProblemsOfDifficulty(difficulty, count) {
-            const container = document.getElementById(`${difficulty}-problems`);
-            container.innerHTML = '';
-
-            for (let i = 0; i < count; i++) {
-                const problem = createMathProblem(difficulty);
-                displayProblem(problem, container);
+        // Year level configurations
+        const yearLevels = [
+            {
+                id: 'reception',
+                name: 'Reception',
+                ages: '4-5',
+                description: 'Focus: Numbers up to 10, simple addition and subtraction, basic doubling and halving',
+                problemTypes: ['addition', 'subtraction', 'multiplication']
+            },
+            {
+                id: 'year1',
+                name: 'Year 1',
+                ages: '5-6',
+                description: 'Focus: Numbers up to 20, addition and subtraction within 20, basic multiplication and division',
+                problemTypes: ['addition', 'subtraction', 'multiplication', 'division']
+            },
+            {
+                id: 'year2',
+                name: 'Year 2',
+                ages: '6-7',
+                description: 'Focus: Numbers up to 100, addition and subtraction with two-digit numbers, 2, 5, and 10 times tables',
+                problemTypes: ['addition', 'subtraction', 'multiplication', 'division']
+            },
+            {
+                id: 'year3',
+                name: 'Year 3',
+                ages: '7-8',
+                description: 'Focus: Numbers up to 1000, mental addition and subtraction, 3, 4, and 8 times tables',
+                problemTypes: ['addition', 'subtraction', 'multiplication', 'division']
+            },
+            {
+                id: 'year4',
+                name: 'Year 4',
+                ages: '8-9',
+                description: 'Focus: Numbers beyond 1000, addition and subtraction with larger numbers, all times tables up to 12×12',
+                problemTypes: ['addition', 'subtraction', 'multiplication', 'division']
             }
-        }
+        ];
 
-        function generateProblemsOfType(type, count) {
-            const container = document.getElementById(`${type}-problems`);
+        // Function to display problems with the new format
+        function displayProblems(problems, containerId) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '';
 
-            // Generate problems of this type at each difficulty level
-            const difficulties = ['reception', 'year1', 'year2', 'year3', 'year4', 'year5', 'year6', 'year7', 'year8', 'year9'];
+            problems.forEach(problem => {
+                const problemDiv = document.createElement('div');
+                problemDiv.className = 'problem';
 
-            for (const difficulty of difficulties) {
-                for (let i = 0; i < count / difficulties.length; i++) {
-                    const problem = createProblemOfType(type, difficulty);
-                    displayProblem(problem, container, difficulty);
+                const typeSpan = document.createElement('span');
+                typeSpan.className = 'problem-type';
+                typeSpan.textContent = `[${problem.type}] `;
+
+                const expressionSpan = document.createElement('span');
+                expressionSpan.className = 'expression';
+                expressionSpan.textContent = `${problem.expression} = `;
+
+                const answerSpan = document.createElement('span');
+                answerSpan.className = 'answer';
+                // Use formattedAnswer instead of raw answer for display
+                answerSpan.textContent = `[answer=${problem.formattedAnswer || problem.answer}]`;
+
+                problemDiv.appendChild(typeSpan);
+                problemDiv.appendChild(expressionSpan);
+                problemDiv.appendChild(answerSpan);
+
+                container.appendChild(problemDiv);
+            });
+        }
+
+        // Function to generate problems
+        function generateProblemSet(yearLevel, problemType, containerId) {
+            // Using new API - manually generate 5 problems
+            const problems = [];
+
+            for (let i = 0; i < 5; i++) {
+                const problem = generateProblem({
+                    yearLevel: yearLevel,
+                    type: problemType
+                });
+                problems.push(problem);
+            }
+
+            displayProblems(problems, containerId);
+
+            // Update active button
+            const buttons = document.querySelectorAll(`.problem-container.${yearLevel} button`);
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+
+                if (problemType === null && btn.id === `generate-${yearLevel}-all`) {
+                    btn.classList.add('active');
+                } else if (btn.id === `generate-${yearLevel}-${problemType}`) {
+                    btn.classList.add('active');
                 }
-            }
+            });
         }
 
-        function displayProblem(problem, container, difficultyLabel = null) {
-            const expression = getProblemExpression(problem);
-            const answer = getAnswer(problem);
-            const points = getPoints(problem);
+        // Create UI for each year level
+        function createYearLevelUI() {
+            const body = document.querySelector('body');
 
-            const problemElement = document.createElement('div');
-            problemElement.className = 'problem';
+            yearLevels.forEach(year => {
+                // Create container
+                const container = document.createElement('div');
+                container.className = `problem-container ${year.id}`;
 
-            let difficultyInfo = difficultyLabel ?
-                `<span style="color: #666; font-size: 12px;">[${difficultyLabel}]</span> ` : '';
+                // Add heading and description
+                const heading = document.createElement('h2');
+                heading.textContent = `${year.name} (Ages ${year.ages})`;
 
-            problemElement.innerHTML = `
-                ${difficultyInfo}<span class="expression">${expression} = ?</span>
-                <span class="answer">(Answer: ${answer}, Points: ${points})</span>
-            `;
+                const description = document.createElement('p');
+                description.className = 'description';
+                description.textContent = year.description;
 
-            container.appendChild(problemElement);
+                // Create controls
+                const controls = document.createElement('div');
+                controls.className = 'problem-controls';
+
+                // Add "All Types" button
+                const allButton = document.createElement('button');
+                allButton.id = `generate-${year.id}-all`;
+                allButton.className = 'active';
+                allButton.textContent = 'All Types';
+                allButton.addEventListener('click', () => {
+                    generateProblemSet(year.id, null, `${year.id}-problems`);
+                });
+                controls.appendChild(allButton);
+
+                // Add problem type buttons
+                year.problemTypes.forEach(type => {
+                    const button = document.createElement('button');
+                    button.id = `generate-${year.id}-${type}`;
+                    button.className = 'problem-type-btn';
+                    button.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                    button.addEventListener('click', () => {
+                        generateProblemSet(year.id, type, `${year.id}-problems`);
+                    });
+                    controls.appendChild(button);
+                });
+
+                // Create problems container
+                const problemsContainer = document.createElement('div');
+                problemsContainer.id = `${year.id}-problems`;
+
+                // Assemble everything
+                container.appendChild(heading);
+                container.appendChild(description);
+                container.appendChild(controls);
+                container.appendChild(problemsContainer);
+
+                // Add to document after the instructions div
+                const instructions = document.querySelector('.instructions');
+                instructions.parentNode.insertBefore(container, instructions.nextSibling);
+            });
         }
 
-        // Display available problem types and difficulty levels (for demonstration)
-        console.log('Available problem types:', getAvailableProblemTypes());
-        console.log('Available difficulty levels:', getAvailableDifficultyLevels());
+        // Initialize the UI and generate initial problems
+        createYearLevelUI();
+
+        // Generate initial problems for each year level
+        yearLevels.forEach(year => {
+            generateProblemSet(year.id, null, `${year.id}-problems`);
+        });
     </script>
 </body>
 

@@ -1,93 +1,110 @@
+/**
+ * Math Game Problem Generator
+ * A simplified JavaScript library for generating math problems tailored
+ * to different UK primary school year levels
+ */
+
+// Import core components
 import {
     createMathProblem,
     getAvailableProblemTypes,
-    getAvailableDifficultyLevels,
-    DIFFICULTY_LEVELS,
-    PROBLEM_TYPES
+    getAvailableDifficultyLevels
 } from './src/problems/ProblemGenerator.js';
 
-import MathProblem from './src/problems/MathProblem.js';
-import ProblemType from './src/problems/ProblemType.js';
-import DifficultyLevel from './src/difficulty/DifficultyLevel.js';
+/**
+ * Generate a single math problem
+ * @param {Object} options - Options for problem generation
+ * @param {string} [options.yearLevel='reception'] - School year level (see YEAR_LEVELS for options)
+ * @param {string} [options.type=null] - Optional problem type (see PROBLEM_TYPES for options)
+ * @returns {Object} Math problem with expression and answer
+ */
+function generateProblem(options = {}) {
+    const yearLevel = options.yearLevel || 'reception';
+    const type = options.type || null;
 
-// Import problem types for direct access
-import AdditionProblem from './src/problems/AdditionProblem.js';
-import SubtractionProblem from './src/problems/SubtractionProblem.js';
-import MultiplicationProblem from './src/problems/MultiplicationProblem.js';
-import DivisionProblem from './src/problems/DivisionProblem.js';
-import SquaredProblem from './src/problems/SquaredProblem.js';
+    const problem = createMathProblem(yearLevel, type);
+
+    return {
+        expression: problem.expression,
+        answer: problem.answer,
+        // Use the formatted answer string for display purposes
+        formattedAnswer: problem.formattedAnswer,
+        type: problem.type || type || 'unknown',
+        yearLevel: yearLevel
+    };
+}
 
 /**
- * Validate an answer for a given problem
- * @param {MathProblem} problem - The math problem
- * @param {number} answer - The answer to validate
+ * Check if a user's answer is correct for a given problem
+ *
+ * @param {Object} problem - The problem object returned by generateProblem
+ * @param {number|string} userAnswer - The user's answer (can be number or string)
  * @returns {boolean} Whether the answer is correct
  */
-function validateAnswer(problem, answer) {
-    return problem.validate(answer);
+function checkAnswer(problem, userAnswer) {
+    // Convert string answers to numbers if needed
+    const numericAnswer = typeof userAnswer === 'string'
+        ? parseFloat(userAnswer)
+        : userAnswer;
+
+    // Handle potential floating point issues
+    if (typeof problem.answer === 'number' && typeof numericAnswer === 'number') {
+        return Math.abs(problem.answer - numericAnswer) < 0.0001;
+    }
+
+    return problem.answer === numericAnswer;
 }
 
 /**
- * Get the expression for a problem
- * @param {MathProblem} problem - The math problem
- * @returns {string} The problem expression
+ * Get all available year levels supported by the generator
+ *
+ * @returns {Array<string>} List of available year levels
  */
-function getProblemExpression(problem) {
-    return problem.expression;
+function getYearLevels() {
+    return getAvailableDifficultyLevels();
 }
 
 /**
- * Get the point value for a problem
- * @param {MathProblem} problem - The math problem
- * @returns {number} Points for solving this problem
+ * Get all available problem types supported by the generator
+ *
+ * @returns {Array<string>} List of available problem types
  */
-function getPoints(problem) {
-    return problem.getPoints();
+function getProblemTypes() {
+    return getAvailableProblemTypes();
 }
 
-/**
- * Get the correct answer for a problem
- * @param {MathProblem} problem - The math problem
- * @returns {number} The correct answer
- */
-function getAnswer(problem) {
-    return problem.answer;
-}
+// Create constants for easier reference, but dynamically
+// generate them to avoid hardcoding
+const YEAR_LEVELS = getYearLevels().reduce((acc, level) => {
+    // Convert 'year1' to 'YEAR1', 'reception' to 'RECEPTION'
+    const constant = level.toUpperCase();
+    acc[constant] = level;
+    return acc;
+}, {});
 
-/**
- * Create a problem of a specific type and difficulty
- * @param {string} problemType - The type of problem to create
- * @param {string} difficulty - The difficulty level
- * @returns {MathProblem} A new math problem instance
- */
-function createProblemOfType(problemType, difficulty = 'year3') {
-    return createMathProblem(difficulty, problemType);
-}
+const PROBLEM_TYPES = getProblemTypes().reduce((acc, type) => {
+    // Convert 'addition' to 'ADDITION'
+    const constant = type.toUpperCase();
+    acc[constant] = type;
+    return acc;
+}, {});
 
+// Export the public API
 export {
-    // Main functions (original API)
-    createMathProblem,
-    validateAnswer,
-    getProblemExpression,
-    getPoints,
-    getAnswer,
-
-    // New functions
-    createProblemOfType,
-    getAvailableProblemTypes,
-    getAvailableDifficultyLevels,
-
-    // Classes for direct access
-    MathProblem,
-    ProblemType,
-    DifficultyLevel,
-    AdditionProblem,
-    SubtractionProblem,
-    MultiplicationProblem,
-    DivisionProblem,
-    SquaredProblem,
-
-    // Constants
-    DIFFICULTY_LEVELS,
+    generateProblem,
+    checkAnswer,
+    getYearLevels,
+    getProblemTypes,
+    YEAR_LEVELS,
     PROBLEM_TYPES
+};
+
+// Default export
+export default {
+    generateProblem,
+    checkAnswer,
+    getYearLevels,
+    getProblemTypes,
+    yearLevels: YEAR_LEVELS,
+    problemTypes: PROBLEM_TYPES
 };
