@@ -27,9 +27,10 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
             case 1: // Halving even numbers up to 20
                 b = 2;
                 a = this._getRandomInt(1, 10) * 2; // Ensure even number
-                expression = `Half of ${a}`;
+                expression = `Half ${a}`;
                 this.problemDetails = {
                     expression: expression,
+                    expression_short: `${a} ${this.symbol} ${b}`,
                     answer: a / b,
                     operands: [a, b]
                 };
@@ -48,8 +49,7 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
                 expression = `Share ${a} equally between ${b}`;
                 this.problemDetails = {
                     expression: expression,
-                    // No need to set expression_short explicitly
-                    // The base class getter will handle the symbol replacement
+                    expression_short: `${a} ${this.symbol} ${b}`,
                     answer: a / b,
                     operands: [a, b]
                 };

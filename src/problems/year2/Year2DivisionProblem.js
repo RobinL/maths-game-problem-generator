@@ -55,8 +55,7 @@ export default class Year2DivisionProblem extends BaseDivisionProblem {
                     // Add short expression for game blocks (max 9 chars)
                     this.problemDetails = {
                         expression: expression,
-                        // No need to set expression_short explicitly for standard format
-                        // The base class getter will handle the symbol replacement
+                        expression_short: `${a} ${this.symbol} ${b}`,
                         answer: a / b,
                         operands: [a, b]
                     };

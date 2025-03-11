@@ -28,6 +28,13 @@ export default class Year1MultiplicationProblem extends BaseMultiplicationProble
                 a = this._getRandomInt(1, 10);
                 b = 2;
                 expression = `Double ${a}`;
+                this.problemDetails = {
+                    expression: expression,
+                    expression_short: `${a} ${this.symbol} ${b}`,
+                    answer: a * b,
+                    operands: [a, b]
+                };
+                return; // Exit early as we've already set problemDetails
                 break;
 
             case 2: // Simple multiplication by 2
