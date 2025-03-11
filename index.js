@@ -1,117 +1,107 @@
 /**
  * Math Game Problem Generator
- * A JavaScript library for generating math problems tailored to different UK primary school year levels.
+ * A simplified JavaScript library for generating math problems tailored
+ * to different UK primary school year levels
  */
 
+// Import core components
 import {
     createMathProblem,
     getAvailableProblemTypes,
     getAvailableDifficultyLevels,
-    DIFFICULTY_LEVELS,
-    PROBLEM_TYPES
+    DIFFICULTY_LEVELS
 } from './src/problems/ProblemGenerator.js';
 
-import MathProblem from './src/problems/MathProblem.js';
-import ProblemType from './src/problems/ProblemType.js';
-import DifficultyLevel from './src/difficulty/DifficultyLevel.js';
-
-// Import problem types for direct access
-import AdditionProblem from './src/problems/AdditionProblem.js';
-import SubtractionProblem from './src/problems/SubtractionProblem.js';
-import MultiplicationProblem from './src/problems/MultiplicationProblem.js';
-import DivisionProblem from './src/problems/DivisionProblem.js';
-import SquaredProblem from './src/problems/SquaredProblem.js';
+/**
+ * Generate a single math problem
+ * @param {string} yearLevel - School year level ('reception', 'year1', 'year2', etc.)
+ * @param {string} [problemType] - Optional problem type ('addition', 'subtraction', etc.)
+ * @returns {Object} Math problem with expression and answer
+ */
+function generateProblem(yearLevel = 'reception', problemType = null) {
+    const problem = createMathProblem(yearLevel, problemType);
+    return {
+        expression: problem.expression,
+        answer: problem.answer,
+        type: problem.type || problemType || 'unknown',
+        yearLevel: yearLevel,
+        points: problem.getPoints ? problem.getPoints() : DIFFICULTY_LEVELS[yearLevel].points
+    };
+}
 
 /**
- * Create a math problem of the specified difficulty and type
- * @param {string} difficulty - The difficulty level ('reception', 'year1', etc.)
- * @param {string|null} specificType - Optional specific problem type
- * @returns {Object} A math problem instance
+ * Generate multiple math problems
+ * @param {Object} options - Generation options
+ * @param {string} [options.yearLevel='reception'] - School year level
+ * @param {string} [options.problemType=null] - Problem type (if null, will generate a mix)
+ * @param {number} [options.count=5] - Number of problems to generate
+ * @returns {Array<Object>} Array of math problems
  */
-function createProblem(difficulty = 'reception', specificType = null) {
-    return createMathProblem(difficulty, specificType);
+function generateProblems(options = {}) {
+    const {
+        yearLevel = 'reception',
+        problemType = null,
+        count = 5
+    } = options;
+
+    const problems = [];
+    for (let i = 0; i < count; i++) {
+        problems.push(generateProblem(yearLevel, problemType));
+    }
+    return problems;
+}
+
+/**
+ * Check if a user's answer is correct
+ * @param {Object} problem - The problem object
+ * @param {number|string} userAnswer - The user's answer (can be number or string)
+ * @returns {boolean} Whether the answer is correct
+ */
+function checkAnswer(problem, userAnswer) {
+    // Convert string answers to numbers if needed
+    const numericAnswer = typeof userAnswer === 'string'
+        ? parseFloat(userAnswer)
+        : userAnswer;
+
+    // Handle potential floating point issues
+    if (typeof problem.answer === 'number' && typeof numericAnswer === 'number') {
+        return Math.abs(problem.answer - numericAnswer) < 0.0001;
+    }
+
+    return problem.answer === numericAnswer;
+}
+
+/**
+ * Get all available difficulty levels
+ * @returns {Array<string>} Array of available difficulty levels
+ */
+function getAvailableLevels() {
+    return getAvailableDifficultyLevels();
 }
 
 /**
  * Get all available problem types
- * @returns {Array<string>} List of available problem types
+ * @returns {Array<string>} Array of available problem types
  */
 function getAvailableTypes() {
     return getAvailableProblemTypes();
 }
 
-/**
- * Get all available difficulty levels
- * @returns {Array<string>} List of available difficulty levels
- */
-function getAvailableDifficulties() {
-    return getAvailableDifficultyLevels();
-}
-
-/**
- * Validate an answer for a given problem
- * @param {Object} problem - The math problem
- * @param {number} answer - The answer to validate
- * @returns {boolean} Whether the answer is correct
- */
-function validateAnswer(problem, answer) {
-    return problem.validate(answer);
-}
-
-/**
- * Get the expression for a problem
- * @param {Object} problem - The math problem
- * @returns {string} The problem expression
- */
-function getProblemExpression(problem) {
-    if (problem.expression.includes('undefined')) {
-        debugger;
-    }
-    return problem.expression;
-}
-
-/**
- * Get the points for a problem
- * @param {Object} problem - The math problem
- * @returns {number} The points value
- */
-function getPoints(problem) {
-    return problem.getPoints();
-}
-
-/**
- * Get the answer for a problem
- * @param {Object} problem - The math problem
- * @returns {number} The correct answer
- */
-function getAnswer(problem) {
-    return problem.answer;
-}
-
+// Export the public API
 export {
-    // Main functions (original API)
-    createMathProblem,
-    validateAnswer,
-    getProblemExpression,
-    getPoints,
-    getAnswer,
-
-    // New functions
-    createProblem,
+    generateProblem,
+    generateProblems,
+    checkAnswer,
+    getAvailableLevels,
     getAvailableTypes,
-    getAvailableDifficulties,
+    DIFFICULTY_LEVELS
+};
 
-    // Classes for direct access
-    MathProblem,
-    ProblemType,
-    DifficultyLevel,
-    AdditionProblem,
-    SubtractionProblem,
-    MultiplicationProblem,
-    DivisionProblem,
-    SquaredProblem,
-
-    // Constants
-    DIFFICULTY_LEVELS,
-    PROBLEM_TYPES
+// Default export for convenience
+export default {
+    generate: generateProblem,
+    generateMany: generateProblems,
+    check: checkAnswer,
+    levels: getAvailableLevels,
+    types: getAvailableTypes
 };

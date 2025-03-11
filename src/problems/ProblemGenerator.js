@@ -34,12 +34,6 @@ import Year4MultiplicationProblem from './year4/Year4MultiplicationProblem.js';
 import Year4DivisionProblem from './year4/Year4DivisionProblem.js';
 import Year4SquaredProblem from './year4/Year4SquaredProblem.js';
 
-// Import legacy problem classes (to be replaced gradually)
-import AdditionProblem from './AdditionProblem.js';
-import SubtractionProblem from './SubtractionProblem.js';
-import MultiplicationProblem from './MultiplicationProblem.js';
-import DivisionProblem from './DivisionProblem.js';
-import SquaredProblem from './SquaredProblem.js';
 
 /**
  * Problem type registry by year and operation
@@ -85,50 +79,7 @@ const PROBLEM_TYPE_CLASSES = {
         squared: Year4SquaredProblem
     },
     // Legacy problem types for other years (to be replaced)
-    year5: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
-    },
-    year6: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
-    },
-    year7: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
-    },
-    year8: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
-    },
-    year9: {
-        addition: AdditionProblem,
-        subtraction: SubtractionProblem,
-        multiplication: MultiplicationProblem,
-        division: DivisionProblem,
-        squared: SquaredProblem
-    }
-};
 
-// Legacy problem type instances (for backward compatibility)
-const PROBLEM_TYPES = {
-    addition: new AdditionProblem(),
-    subtraction: new SubtractionProblem(),
-    multiplication: new MultiplicationProblem(),
-    division: new DivisionProblem(),
-    squared: new SquaredProblem()
 };
 
 /**
@@ -223,12 +174,9 @@ function createMathProblem(difficulty = 'reception', specificType = null) {
 
     if (specificType) {
         if (PROBLEM_TYPE_CLASSES[difficulty] && PROBLEM_TYPE_CLASSES[difficulty][specificType]) {
-            // Use the year-specific problem class if available
+            // Use the year-specific problem class
             const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty][specificType];
             problemType = new ProblemClass();
-        } else if (PROBLEM_TYPES[specificType]) {
-            // Fall back to legacy problem type if needed
-            problemType = PROBLEM_TYPES[specificType];
         } else {
             // Default to addition if type not found
             const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty].addition;
@@ -239,12 +187,13 @@ function createMathProblem(difficulty = 'reception', specificType = null) {
         const type = selectProblemType(difficulty);
 
         if (PROBLEM_TYPE_CLASSES[difficulty] && PROBLEM_TYPE_CLASSES[difficulty][type]) {
-            // Use the year-specific problem class if available
+            // Use the year-specific problem class
             const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty][type];
             problemType = new ProblemClass();
         } else {
-            // Fall back to legacy problem type
-            problemType = PROBLEM_TYPES[type];
+            // Default to addition if type not found
+            const ProblemClass = PROBLEM_TYPE_CLASSES[difficulty].addition;
+            problemType = new ProblemClass();
         }
     }
 
@@ -278,7 +227,8 @@ function selectProblemType(difficulty) {
  * @returns {Array<string>} List of available problem types
  */
 function getAvailableProblemTypes() {
-    return Object.keys(PROBLEM_TYPES);
+    // Return the common problem types across all year groups
+    return ['addition', 'subtraction', 'multiplication', 'division', 'squared'];
 }
 
 /**
@@ -293,6 +243,5 @@ export {
     createMathProblem,
     getAvailableProblemTypes,
     getAvailableDifficultyLevels,
-    DIFFICULTY_LEVELS,
-    PROBLEM_TYPES
+    DIFFICULTY_LEVELS
 };
