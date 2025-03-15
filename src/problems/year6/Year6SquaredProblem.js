@@ -23,7 +23,7 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
         // Randomly choose between different types of Year 6 squared problems
         const problemType = this._getRandomInt(1, 4);
 
-        let a, expression, expression_short;
+        let a, expression, expression_short, answer;
 
         switch (problemType) {
             case 1: // Basic square numbers with squared notation (e.g., 7² = 49)
@@ -46,6 +46,7 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
 
                 // Use squared notation
                 expression = `${a}²`;
+                answer = a * a; // For squared problems, answer is a²
                 break;
 
             case 2: // Find the square root (e.g., "What number squared equals 81?")
@@ -56,6 +57,7 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 // Format as a square root problem
                 expression = `√${squareValue}`;
                 a = Math.sqrt(squareValue);
+                answer = a; // For square root problems, answer is √n = a
                 break;
 
             case 3: // Area problems using squares (e.g., "Area of a 10×10 square")
@@ -65,6 +67,7 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 // Format as an area problem
                 expression = `${a} × ${a}`;
                 expression_short = `${a}×${a}`;
+                answer = a * a; // For area problems, answer is a²
                 break;
 
             case 4: // Identify if a number is a square (e.g., "Is 64 a square number?")
@@ -76,13 +79,14 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 // Format as a square root problem
                 expression = `√${perfectSquare}`;
                 a = Math.sqrt(perfectSquare);
+                answer = a; // For square root problems, answer is √n = a
                 break;
         }
 
         this.problemDetails = {
             expression: expression,
             expression_short: expression_short,
-            answer: a * a,
+            answer: answer,
             operands: [a]
         };
     }

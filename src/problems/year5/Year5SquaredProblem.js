@@ -23,7 +23,7 @@ export default class Year5SquaredProblem extends BaseSquaredProblem {
         // Randomly choose between different types of Year 5 squared problems
         const problemType = this._getRandomInt(1, 3);
 
-        let a, expression, expression_short;
+        let a, expression, expression_short, answer;
 
         switch (problemType) {
             case 1: // Basic square numbers with squared notation (e.g., 6² = 36)
@@ -51,6 +51,7 @@ export default class Year5SquaredProblem extends BaseSquaredProblem {
 
                 // Use squared notation as it's formally introduced in Year 5
                 expression = `${a}²`;
+                answer = a * a; // For squared problems, answer is a²
                 break;
 
             case 2: // Find the square root (e.g., "What number squared equals 81?")
@@ -61,6 +62,7 @@ export default class Year5SquaredProblem extends BaseSquaredProblem {
                 // Format as a "what number squared" problem
                 expression = `√${squareValue}`;
                 a = Math.sqrt(squareValue);
+                answer = a; // For square root problems, answer is √n = a
                 break;
 
             case 3: // Area problems implicitly using squares (e.g., "Area of a 7×7 square")
@@ -70,13 +72,14 @@ export default class Year5SquaredProblem extends BaseSquaredProblem {
                 // Format as an area problem
                 expression = `${a} × ${a}`;
                 expression_short = `${a}×${a}`;
+                answer = a * a; // For area problems, answer is a²
                 break;
         }
 
         this.problemDetails = {
             expression: expression,
             expression_short: expression_short,
-            answer: a * a,
+            answer: answer,
             operands: [a]
         };
     }

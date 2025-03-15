@@ -4,10 +4,13 @@
   "description": "A JavaScript library for generating math problems tailored to different UK primary school year levels",
   "type": "module",
   "main": "index.js",
+  "exports": {
+    "import": "./index.js"
+  },
   "scripts": {
-    "start": "node server.js",
     "demo": "node server.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "test:squared": "node test-squared.js"
   },
   "keywords": [
     "math",
@@ -16,6 +19,14 @@
     "problem",
     "generator"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Robin Linacre",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RobinL/maths-game-problem-generator.git"
+  },
+  "homepage": "https://github.com/RobinL/maths-game-problem-generator#readme",
+  "bugs": {
+    "url": "https://github.com/RobinL/maths-game-problem-generator/issues"
+  }
 }
