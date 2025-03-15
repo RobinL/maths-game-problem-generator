@@ -41,6 +41,13 @@ import Year5MultiplicationProblem from './year5/Year5MultiplicationProblem.js';
 import Year5DivisionProblem from './year5/Year5DivisionProblem.js';
 import Year5SquaredProblem from './year5/Year5SquaredProblem.js';
 
+// Import Year 6-specific problem classes
+import Year6AdditionProblem from './year6/Year6AdditionProblem.js';
+import Year6SubtractionProblem from './year6/Year6SubtractionProblem.js';
+import Year6MultiplicationProblem from './year6/Year6MultiplicationProblem.js';
+import Year6DivisionProblem from './year6/Year6DivisionProblem.js';
+import Year6SquaredProblem from './year6/Year6SquaredProblem.js';
+
 
 /**
  * Problem type registry by year and operation
@@ -93,6 +100,14 @@ const PROBLEM_TYPE_CLASSES = {
         division: Year5DivisionProblem,
         squared: Year5SquaredProblem
     },
+    // Year 6 problem types
+    year6: {
+        addition: Year6AdditionProblem,
+        subtraction: Year6SubtractionProblem,
+        multiplication: Year6MultiplicationProblem,
+        division: Year6DivisionProblem,
+        squared: Year6SquaredProblem
+    },
     // Legacy problem types for other years (to be replaced)
 
 };
@@ -143,6 +158,13 @@ const TYPE_DISTRIBUTIONS = {
         multiplication: 0.2, // Complex mental multiplication with factors
         division: 0.2,      // Factor pairs and mental division strategies
         squared: 0.2        // Formally introduced with notation
+    },
+    year6: {
+        addition: 0.2,      // Fluent with large numbers and decimals
+        subtraction: 0.2,   // Multi-step strategies with large numbers and decimals
+        multiplication: 0.2, // Complex mental calculations and decimals
+        division: 0.2,      // Multi-step division and decimal division
+        squared: 0.2        // Consolidation of square numbers knowledge
     }
 };
 
@@ -223,7 +245,7 @@ function getAvailableProblemTypes() {
  * @returns {Array<string>} List of available difficulty levels
  */
 function getAvailableDifficultyLevels() {
-    return ['reception', 'year1', 'year2', 'year3', 'year4', 'year5'];
+    return ['reception', 'year1', 'year2', 'year3', 'year4', 'year5', 'year6'];
 }
 
 export {
