@@ -43,17 +43,34 @@ function generateProblem(options = {}) {
  * @returns {boolean} Whether the answer is correct
  */
 function checkAnswer(problem, userAnswer) {
-    // Convert string answers to numbers if needed
-    const numericAnswer = typeof userAnswer === 'string'
-        ? parseFloat(userAnswer)
-        : userAnswer;
+    // Convert userAnswer to a number if it's a string
+    const numericUserAnswer = typeof userAnswer === 'string' ? parseFloat(userAnswer) : userAnswer;
 
-    // Handle potential floating point issues
-    if (typeof problem.answer === 'number' && typeof numericAnswer === 'number') {
-        return Math.abs(problem.answer - numericAnswer) < 0.0001;
+    // Handle NaN or invalid inputs
+    if (isNaN(numericUserAnswer)) {
+        console.log(`User Answer: ${userAnswer}, Correct Answer: ${problem.answer}, Correct: false`);
+        return false;
     }
 
-    return problem.answer === numericAnswer;
+    // Determine decimal places in both answers
+    const correctAnswerStr = problem.answer.toString();
+    const userAnswerStr = numericUserAnswer.toString();
+    const correctDecimalPlaces = (correctAnswerStr.split('.')[1] || '').length;
+    const userDecimalPlaces = (userAnswerStr.split('.')[1] || '').length;
+    const maxDecimalPlaces = Math.max(correctDecimalPlaces, userDecimalPlaces, 2); // Minimum 2 for consistency
+
+    // Round both numbers to the same precision
+    const roundedCorrectAnswer = Number(problem.answer.toFixed(maxDecimalPlaces));
+    const roundedUserAnswer = Number(numericUserAnswer.toFixed(maxDecimalPlaces));
+
+    // Use a small tolerance for floating-point comparison
+    const tolerance = 1e-10;
+    const isCorrect = Math.abs(roundedCorrectAnswer - roundedUserAnswer) < tolerance;
+
+    // Log the details
+    console.log(`User Answer: ${numericUserAnswer}, Correct Answer: ${problem.answer}, Correct: ${isCorrect}`);
+
+    return isCorrect;
 }
 
 /**

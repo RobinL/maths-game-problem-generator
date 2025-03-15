@@ -130,6 +130,39 @@
         .problem-type-btn.active {
             background-color: #16a085;
         }
+
+        .answer-input {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .check-button {
+            background-color: #27ae60;
+            font-size: 13px;
+            padding: 5px 10px;
+        }
+
+        .check-button:hover {
+            background-color: #219653;
+        }
+
+        .show-answer-button {
+            background-color: #7f8c8d;
+            font-size: 13px;
+            padding: 5px 10px;
+            margin-top: 5px;
+        }
+
+        .show-answer-button:hover {
+            background-color: #6c7a7d;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-left: 5px;
+        }
     </style>
 </head>
 
@@ -220,13 +253,65 @@
                 expressionSpan.className = 'expression';
                 expressionSpan.textContent = `${problem.expression} = `;
 
+                // Create input field for user answer
+                const answerInput = document.createElement('input');
+                answerInput.type = 'text';
+                answerInput.className = 'answer-input';
+                answerInput.placeholder = 'Your answer';
+                answerInput.style.width = '80px';
+                answerInput.style.marginRight = '10px';
+
+                // Create check button
+                const checkButton = document.createElement('button');
+                checkButton.textContent = 'Check';
+                checkButton.className = 'check-button';
+                checkButton.style.marginRight = '10px';
+
+                // Create result span
+                const resultSpan = document.createElement('span');
+                resultSpan.className = 'result';
+
+                // Add event listener to check button
+                checkButton.addEventListener('click', () => {
+                    const userAnswer = answerInput.value.trim();
+                    if (userAnswer === '') {
+                        resultSpan.textContent = 'Please enter an answer';
+                        resultSpan.style.color = 'orange';
+                        return;
+                    }
+
+                    const isCorrect = checkAnswer(problem, userAnswer);
+                    resultSpan.textContent = isCorrect ? 'Correct!' : 'Incorrect';
+                    resultSpan.style.color = isCorrect ? 'green' : 'red';
+                });
+
                 const answerSpan = document.createElement('span');
                 answerSpan.className = 'answer';
                 // Use formattedAnswer instead of raw answer for display
                 answerSpan.textContent = `[answer=${problem.formattedAnswer || problem.answer}]`;
+                answerSpan.style.display = 'none'; // Hide the answer initially
+
+                // Create show answer button
+                const showAnswerButton = document.createElement('button');
+                showAnswerButton.textContent = 'Show Answer';
+                showAnswerButton.className = 'show-answer-button';
+                showAnswerButton.addEventListener('click', () => {
+                    if (answerSpan.style.display === 'none') {
+                        answerSpan.style.display = 'inline';
+                        showAnswerButton.textContent = 'Hide Answer';
+                    } else {
+                        answerSpan.style.display = 'none';
+                        showAnswerButton.textContent = 'Show Answer';
+                    }
+                });
 
                 problemDiv.appendChild(typeSpan);
                 problemDiv.appendChild(expressionSpan);
+                problemDiv.appendChild(answerInput);
+                problemDiv.appendChild(checkButton);
+                problemDiv.appendChild(resultSpan);
+                problemDiv.appendChild(document.createElement('br'));
+                problemDiv.appendChild(showAnswerButton);
                 problemDiv.appendChild(answerSpan);
 
                 container.appendChild(problemDiv);
