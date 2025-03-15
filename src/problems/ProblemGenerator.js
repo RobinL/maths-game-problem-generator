@@ -34,6 +34,13 @@ import Year4MultiplicationProblem from './year4/Year4MultiplicationProblem.js';
 import Year4DivisionProblem from './year4/Year4DivisionProblem.js';
 import Year4SquaredProblem from './year4/Year4SquaredProblem.js';
 
+// Import Year 5-specific problem classes
+import Year5AdditionProblem from './year5/Year5AdditionProblem.js';
+import Year5SubtractionProblem from './year5/Year5SubtractionProblem.js';
+import Year5MultiplicationProblem from './year5/Year5MultiplicationProblem.js';
+import Year5DivisionProblem from './year5/Year5DivisionProblem.js';
+import Year5SquaredProblem from './year5/Year5SquaredProblem.js';
+
 
 /**
  * Problem type registry by year and operation
@@ -78,6 +85,14 @@ const PROBLEM_TYPE_CLASSES = {
         division: Year4DivisionProblem,
         squared: Year4SquaredProblem
     },
+    // Year 5 problem types
+    year5: {
+        addition: Year5AdditionProblem,
+        subtraction: Year5SubtractionProblem,
+        multiplication: Year5MultiplicationProblem,
+        division: Year5DivisionProblem,
+        squared: Year5SquaredProblem
+    },
     // Legacy problem types for other years (to be replaced)
 
 };
@@ -115,7 +130,20 @@ const TYPE_DISTRIBUTIONS = {
         division: 0.2,      // Division with 2, 3, 4, 5, 8, 10
         squared: 0          // Not formally taught as "squares"
     },
-
+    year4: {
+        addition: 0.25,     // Three-digit numbers and simple decimals
+        subtraction: 0.25,  // Complements to 100/1000 and simple decimals
+        multiplication: 0.25, // All times tables up to 12 × 12
+        division: 0.25,     // Division facts from times tables up to 12 × 12
+        squared: 0          // Not formally emphasized yet
+    },
+    year5: {
+        addition: 0.2,      // Four-digit numbers and decimals
+        subtraction: 0.2,   // Large numbers and decimals with rounding strategies
+        multiplication: 0.2, // Complex mental multiplication with factors
+        division: 0.2,      // Factor pairs and mental division strategies
+        squared: 0.2        // Formally introduced with notation
+    }
 };
 
 /**
@@ -195,7 +223,7 @@ function getAvailableProblemTypes() {
  * @returns {Array<string>} List of available difficulty levels
  */
 function getAvailableDifficultyLevels() {
-    return ['reception', 'year1', 'year2', 'year3', 'year4'];
+    return ['reception', 'year1', 'year2', 'year3', 'year4', 'year5'];
 }
 
 export {

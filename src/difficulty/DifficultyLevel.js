@@ -29,5 +29,6 @@ export const DIFFICULTY_LEVELS = {
     year1: new DifficultyLevel('year1', 15),
     year2: new DifficultyLevel('year2', 20),
     year3: new DifficultyLevel('year3', 25),
-    year4: new DifficultyLevel('year4', 30)
+    year4: new DifficultyLevel('year4', 30),
+    year5: new DifficultyLevel('year5', 35)
 };
