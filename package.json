@@ -1,6 +1,6 @@
 {
   "name": "maths-game-problem-generator",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "A JavaScript library for generating math problems tailored to different UK primary school year levels",
   "type": "module",
   "main": "index.js",
