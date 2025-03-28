@@ -77,25 +77,6 @@ export default class BaseMathProblem {
     }
 
     /**
-     * Validate if the provided answer is correct
-     * @param {number} userAnswer - The user's answer to check
-     * @returns {boolean} Whether the answer is correct
-     */
-    validate(userAnswer) {
-        // Convert string answers to numbers if needed
-        const numericAnswer = typeof userAnswer === 'string'
-            ? parseFloat(userAnswer)
-            : userAnswer;
-
-        // Handle potential floating point issues
-        if (typeof this.answer === 'number' && typeof numericAnswer === 'number') {
-            return Math.abs(this.answer - numericAnswer) < 0.0001;
-        }
-
-        return this.answer === numericAnswer;
-    }
-
-    /**
      * Get the point value for this problem
      * @returns {number} Points for solving this problem
      */
