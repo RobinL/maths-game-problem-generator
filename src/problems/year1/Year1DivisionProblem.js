@@ -10,7 +10,7 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
     constructor() {
         super(DIFFICULTY_LEVELS.year1);
         this.symbol = '÷';
-        this.generate()
+        this.generate();
     }
 
     generate() {
@@ -23,38 +23,38 @@ export default class Year1DivisionProblem extends BaseDivisionProblem {
 
         let a, b, expression;
 
+        let expression_short = null;
+
         switch (problemType) {
-            case 1: // Halving even numbers up to 20
+            case 1:
                 b = 2;
                 a = this._getRandomInt(1, 10) * 2; // Ensure even number
                 expression = `Half ${a}`;
-                this.problemDetails = {
-                    expression: expression,
-                    expression_short: `${a} ${this.symbol} ${b}`,
-                    answer: a / b,
-                    operands: [a, b]
-                };
-                return; // Exit early as we've already set problemDetails
+                expression_short = `${a} ${this.symbol} ${b}`;
                 break;
 
-            case 2: // Simple division by 2 (sharing between 2)
+            case 2:
                 b = 2;
-                a = this._getRandomInt(2, 20);
+                a = this._getRandomInt(1, 10) * 2;
                 expression = `${a} ${this.symbol} ${b}`;
+                // No explicit expression_short needed; base class will use expression
                 break;
 
-            case 3: // Simple sharing problems with small numbers
+            case 3:
                 b = this._getRandomInt(2, 5);
                 a = b * this._getRandomInt(1, 4); // Ensure divisible
                 expression = `Share ${a} equally between ${b}`;
-                this.problemDetails = {
-                    expression: expression,
-                    expression_short: `${a} ${this.symbol} ${b}`,
-                    answer: a / b,
-                    operands: [a, b]
-                };
-                return; // Exit early as we've already set problemDetails
+                expression_short = `${a} ${this.symbol} ${b}`;
                 break;
         }
+
+        // Assign problemDetails *after* the switch, ensuring it always happens.
+        this.problemDetails = {
+            expression: expression,
+            // Conditionally add expression_short only if it was set above
+            ...(expression_short && { expression_short: expression_short }),
+            answer: a / b, // Calculation uses 'a' and 'b' determined in the switch
+            operands: [a, b]
+        };
     }
 }
