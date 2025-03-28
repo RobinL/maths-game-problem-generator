@@ -60,13 +60,15 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                 expression = `${a} ${this.symbol} ${b}`;
                 break;
 
-            case 4: // Division with remainders (e.g., 37 ÷ 5 = 7 remainder 2)
+            case 4: // "What is the remainder" problems (e.g., Remainder from 37 ÷ 5 = 2)
                 b = this._getRandomInt(2, 9);
                 // Create a number that gives a remainder when divided by b
                 const quotient = this._getRandomInt(2, 12);
                 const remainder = this._getRandomInt(1, b - 1);
                 a = b * quotient + remainder;
-                expression = `${a} ${this.symbol} ${b}`;
+                expression = `Remainder from ${a} ${this.symbol} ${b}`;
+                expression_short = `${a} mod ${b}`;
+                this.symbol = 'mod'; // Change symbol for answer checking
                 break;
 
             case 5: // Factor pairs (e.g., 48 ÷ 6 = 8, where 6 and 8 are factors of 48)
@@ -89,12 +91,22 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                 break;
         }
 
+        // Calculate the answer based on the problem type
+        let answer;
+        if (problemType === 4) {
+            // For remainder problems, the answer is just the remainder
+            answer = a % b;
+        } else {
+            // For regular division problems
+            answer = a / b;
+        }
+
         // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
             // Conditionally add expression_short only if it was set
             ...(expression_short && { expression_short: expression_short }),
-            answer: a / b,
+            answer: answer,
             operands: [a, b]
         };
     }
