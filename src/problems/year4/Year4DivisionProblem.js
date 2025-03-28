@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseDivisionProblem
  */
 export default class Year4DivisionProblem extends BaseDivisionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.symbol = '÷';
@@ -23,6 +22,7 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
         const problemType = this._getRandomInt(1, 5);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Division using 6, 7, 9, 11, 12 times tables (the more challenging ones)
@@ -73,7 +73,6 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                 // Choose a number with multiple factors
                 const compositeNumbers = [24, 36, 48, 60, 72, 84, 96, 108, 120, 144];
                 a = compositeNumbers[this._getRandomInt(0, compositeNumbers.length - 1)];
-
                 // Find all factors of a
                 const factors = [];
                 for (let i = 2; i <= Math.sqrt(a); i++) {
@@ -84,15 +83,17 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                         }
                     }
                 }
-
                 // Choose a factor as divisor
                 b = factors[this._getRandomInt(0, factors.length - 1)];
                 expression = `${a} ${this.symbol} ${b}`;
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a / b,
             operands: [a, b]
         };

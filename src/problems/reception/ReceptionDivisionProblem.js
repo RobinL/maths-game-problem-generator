@@ -16,24 +16,19 @@ export default class ReceptionDivisionProblem extends BaseDivisionProblem {
         this.generate()
     }
 
-
     generate() {
-
         const minResult = 1;
         const maxResult = 5;
         const divisor = 2; // Always halving
-
-
         const result = this._getRandomInt(minResult, maxResult);
-
-
         const dividend = result * divisor;
 
+        const expression = `Half ${dividend}`;
+        let expression_short = `${dividend} ${this.symbol} ${divisor}`;
 
         this.problemDetails = {
-            expression: `Half ${dividend}`,
-            // No need to set expression_short explicitly
-            // The base class getter will handle the symbol replacement
+            expression: expression,
+            expression_short: expression_short,
             answer: result,
             operands: [dividend, divisor]
         };

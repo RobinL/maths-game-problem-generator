@@ -22,6 +22,7 @@ export default class Year2DivisionProblem extends BaseDivisionProblem {
         const problemType = this._getRandomInt(1, 4);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Division by 2 (related to 2 times table)
@@ -53,19 +54,16 @@ export default class Year2DivisionProblem extends BaseDivisionProblem {
                 } else {
                     expression = `How many groups of ${b} in ${a}?`;
                     // Add short expression for game blocks (max 9 chars)
-                    this.problemDetails = {
-                        expression: expression,
-                        expression_short: `${a} ${this.symbol} ${b}`,
-                        answer: a / b,
-                        operands: [a, b]
-                    };
-                    return; // Exit early as we've already set problemDetails
+                    expression_short = `${a} ${this.symbol} ${b}`;
                 }
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a / b,
             operands: [a, b]
         };
