@@ -9,10 +9,12 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.symbol = '÷';
+        this.isRemainderProblem = false; // Add flag to track remainder problems
         this.generate()
     }
 
     generate() {
+
         // With mastery of tables to 12×12, Year 4 students can mentally divide using those facts
         // They recognize factor pairs for numbers (e.g. factors of 48 are 6 and 8, so 48 ÷ 6 = 8)
         // They comfortably handle divisions like 81 ÷ 9 = 9 or 72 ÷ 8 = 9 in their heads
@@ -20,6 +22,8 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
 
         // Randomly choose between different types of Year 4 division problems
         const problemType = this._getRandomInt(1, 5);
+
+        this.isRemainderProblem = false; // Reset flag
 
         let a, b, expression;
         let expression_short = null;
@@ -61,6 +65,7 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                 break;
 
             case 4: // "What is the remainder" problems (e.g., Remainder from 37 ÷ 5 = 2)
+                this.isRemainderProblem = true; // Set the flag for remainder problems
                 b = this._getRandomInt(2, 9);
                 // Create a number that gives a remainder when divided by b
                 const quotient = this._getRandomInt(2, 12);
@@ -104,10 +109,22 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
         // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            // Conditionally add expression_short only if it was set
-            ...(expression_short && { expression_short: expression_short }),
+            // We'll handle expression_short through the getter method
             answer: answer,
             operands: [a, b]
         };
+    }
+
+    /**
+     * Override the expression_short getter to handle remainder problems correctly
+     * @returns {string} The short formatted expression
+     */
+    get expression_short() {
+        if (this.isRemainderProblem) {
+            return `${this.problemDetails.operands[0]} mod ${this.problemDetails.operands[1]}`;
+        }
+
+        // For regular division problems, use the parent class implementation
+        return super.expression_short;
     }
 }
