@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseMultiplicationProblem
  */
 export default class Year1MultiplicationProblem extends BaseMultiplicationProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year1);
         this.symbol = '×';
@@ -22,19 +21,14 @@ export default class Year1MultiplicationProblem extends BaseMultiplicationProble
         const problemType = this._getRandomInt(1, 3);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Doubling small numbers
                 a = this._getRandomInt(1, 10);
                 b = 2;
                 expression = `Double ${a}`;
-                this.problemDetails = {
-                    expression: expression,
-                    expression_short: `${a} ${this.symbol} ${b}`,
-                    answer: a * b,
-                    operands: [a, b]
-                };
-                return; // Exit early as we've already set problemDetails
+                expression_short = `${a} ${this.symbol} ${b}`;
                 break;
 
             case 2: // Simple multiplication by 2
@@ -50,8 +44,11 @@ export default class Year1MultiplicationProblem extends BaseMultiplicationProble
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * b,
             operands: [a, b]
         };

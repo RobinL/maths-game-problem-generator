@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseAdditionProblem
  */
 export default class Year5AdditionProblem extends BaseAdditionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year5);
         this.generate()
@@ -21,7 +20,8 @@ export default class Year5AdditionProblem extends BaseAdditionProblem {
         // Randomly choose between different types of Year 5 addition problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b, expression, expression_short;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Adding large numbers (e.g., 2,500 + 4,700 = 7,200)
@@ -81,9 +81,11 @@ export default class Year5AdditionProblem extends BaseAdditionProblem {
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            expression_short: expression_short,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a + b,
             operands: [a, b]
         };

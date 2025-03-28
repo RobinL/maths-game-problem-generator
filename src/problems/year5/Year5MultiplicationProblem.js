@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseMultiplicationProblem
  */
 export default class Year5MultiplicationProblem extends BaseMultiplicationProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year5);
         this.symbol = '×';
@@ -23,7 +22,8 @@ export default class Year5MultiplicationProblem extends BaseMultiplicationProble
         // Randomly choose between different types of Year 5 multiplication problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b, expression, expression_short;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Multiply two-digit by one-digit (e.g., 15 × 6 = 90)
@@ -73,9 +73,11 @@ export default class Year5MultiplicationProblem extends BaseMultiplicationProble
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            expression_short: expression_short,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * b,
             operands: [a, b]
         };

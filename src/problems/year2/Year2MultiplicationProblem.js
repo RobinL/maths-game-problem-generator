@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseMultiplicationProblem
  */
 export default class Year2MultiplicationProblem extends BaseMultiplicationProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year2);
         this.symbol = '×';
@@ -22,6 +21,7 @@ export default class Year2MultiplicationProblem extends BaseMultiplicationProble
         const problemType = this._getRandomInt(1, 4);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // 2 times table (up to 2 × 10)
@@ -46,7 +46,6 @@ export default class Year2MultiplicationProblem extends BaseMultiplicationProble
                 // Choose between 2, 5, and 10 for one factor
                 b = [2, 5, 10][this._getRandomInt(0, 2)];
                 a = this._getRandomInt(1, 10);
-
                 // Randomly decide whether to put the 2, 5, or 10 first or second
                 if (this._getRandomInt(0, 1) === 0) {
                     expression = `${b} ${this.symbol} ${a}`;
@@ -56,8 +55,11 @@ export default class Year2MultiplicationProblem extends BaseMultiplicationProble
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * b,
             operands: [a, b]
         };

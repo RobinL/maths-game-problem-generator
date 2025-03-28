@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSubtractionProblem
  */
 export default class Year3SubtractionProblem extends BaseSubtractionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year3);
         this.generate()
@@ -20,7 +19,8 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
         // Randomly choose between different types of Year 3 subtraction problems
         const problemType = this._getRandomInt(1, 4);
 
-        let a, b;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Subtract ones from a three-digit number (e.g., 256 - 6)
@@ -32,6 +32,7 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
                     a += this._getRandomInt(2, 8);
                 }
                 b = this._getRandomInt(2, Math.min(9, a % 10));
+                expression = `${a} - ${b}`;
                 break;
 
             case 2: // Subtract tens from a three-digit number (e.g., 340 - 40)
@@ -43,6 +44,7 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
                     a += this._getRandomInt(2, 8) * 10;
                 }
                 b = this._getRandomInt(1, Math.min(9, Math.floor((a % 100) / 10))) * 10;
+                expression = `${a} - ${b}`;
                 break;
 
             case 3: // Subtract hundreds from a three-digit number (e.g., 500 - 200)
@@ -50,6 +52,7 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
                 // Ensure the hundreds digit is large enough to subtract from
                 const hundredsDigit = Math.floor(a / 100);
                 b = this._getRandomInt(1, hundredsDigit - 1) * 100;
+                expression = `${a} - ${b}`;
                 break;
 
             case 4: // Simple subtraction from a multiple of 10 or 100 (e.g., 100 - 35)
@@ -66,11 +69,15 @@ export default class Year3SubtractionProblem extends BaseSubtractionProblem {
                     // Subtract a single-digit number
                     b = this._getRandomInt(2, 9);
                 }
+                expression = `${a} - ${b}`;
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
-            expression: `${a} - ${b}`,
+            expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a - b,
             operands: [a, b]
         };
