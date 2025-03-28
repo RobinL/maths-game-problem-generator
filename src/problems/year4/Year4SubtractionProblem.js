@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSubtractionProblem
  */
 export default class Year4SubtractionProblem extends BaseSubtractionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.generate()
@@ -21,7 +20,8 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
         // Randomly choose between different types of Year 4 subtraction problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Complements to 100 (e.g., 100 - 45 = 55)
@@ -31,6 +31,7 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
                 if (b < 10 || b > 90) {
                     b = 50;
                 }
+                expression = `${a} - ${b}`;
                 break;
 
             case 2: // Subtract multiples of 10 from three-digit numbers (e.g., 750 - 50 = 700)
@@ -40,11 +41,13 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
                 if ((a - b) % 100 === 0 && (a % 100) !== 0) {
                     b += 10;
                 }
+                expression = `${a} - ${b}`;
                 break;
 
             case 3: // Decimal subtraction (e.g., 2.0 - 0.5 = 1.5)
                 a = this._getRandomInt(1, 5) + 0.0; // Ensure it's a whole number as a decimal
                 b = this._getRandomInt(1, 9) / 10;
+                expression = `${a} - ${b}`;
                 break;
 
             case 4: // Subtract from 1000 (e.g., 1000 - 350 = 650)
@@ -54,6 +57,7 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
                 if (b < 100 || b > 900) {
                     b = 500 + this._getRandomInt(-2, 2) * 100;
                 }
+                expression = `${a} - ${b}`;
                 break;
 
             case 5: // Subtract a two-digit number from a three-digit number (e.g., 325 - 47)
@@ -68,11 +72,15 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
                 if ((a % 10) > (b % 10)) {
                     a -= (a % 10) - (b % 10) + 1;
                 }
+                expression = `${a} - ${b}`;
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
-            expression: `${a} - ${b}`,
+            expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a - b,
             operands: [a, b]
         };

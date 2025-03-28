@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSubtractionProblem
  */
 export default class Year5SubtractionProblem extends BaseSubtractionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year5);
         this.generate()
@@ -22,7 +21,8 @@ export default class Year5SubtractionProblem extends BaseSubtractionProblem {
         // Randomly choose between different types of Year 5 subtraction problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b, expression, expression_short;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Subtract from 10,000 (e.g., 10,000 - 2,500 = 7,500)
@@ -69,9 +69,11 @@ export default class Year5SubtractionProblem extends BaseSubtractionProblem {
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            expression_short: expression_short,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a - b,
             operands: [a, b]
         };

@@ -8,7 +8,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSquaredProblem
  */
 export default class Year6SquaredProblem extends BaseSquaredProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year6);
         this.generate()
@@ -23,19 +22,18 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
         // Randomly choose between different types of Year 6 squared problems
         const problemType = this._getRandomInt(1, 4);
 
-        let a, expression, expression_short, answer;
+        let a, expression, answer;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Basic square numbers with squared notation (e.g., 7² = 49)
                 // Include all squares 1-12, with some emphasis on the harder ones
                 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15];
                 const weights = [1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 1]; // Include some beyond 12
-
                 // Weighted random selection
                 let totalWeight = weights.reduce((a, b) => a + b, 0);
                 let randomWeight = this._getRandomInt(1, totalWeight);
                 let cumulativeWeight = 0;
-
                 for (let i = 0; i < values.length; i++) {
                     cumulativeWeight += weights[i];
                     if (randomWeight <= cumulativeWeight) {
@@ -43,7 +41,6 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                         break;
                     }
                 }
-
                 // Use squared notation
                 expression = `${a}²`;
                 answer = a * a; // For squared problems, answer is a²
@@ -53,7 +50,6 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 // Include all common square numbers, including some beyond 12²
                 const squareNumbers = [4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 225];
                 const squareValue = squareNumbers[this._getRandomInt(0, squareNumbers.length - 1)];
-
                 // Format as a square root problem
                 expression = `√${squareValue}`;
                 a = Math.sqrt(squareValue);
@@ -63,7 +59,6 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
             case 3: // Area problems using squares (e.g., "Area of a 10×10 square")
                 // Choose a side length between 3 and 15
                 a = this._getRandomInt(3, 15);
-
                 // Format as an area problem
                 expression = `${a} × ${a}`;
                 expression_short = `${a}×${a}`;
@@ -75,7 +70,6 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 // The UI doesn't support true/false questions, so we'll just use the square root format
                 const perfectSquares = [16, 25, 36, 49, 64, 81, 100, 121, 144, 169];
                 const perfectSquare = perfectSquares[this._getRandomInt(0, perfectSquares.length - 1)];
-
                 // Format as a square root problem
                 expression = `√${perfectSquare}`;
                 a = Math.sqrt(perfectSquare);
@@ -83,9 +77,11 @@ export default class Year6SquaredProblem extends BaseSquaredProblem {
                 break;
         }
 
+        // Assign problemDetails ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            expression_short: expression_short,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: answer,
             operands: [a]
         };

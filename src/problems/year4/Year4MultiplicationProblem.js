@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseMultiplicationProblem
  */
 export default class Year4MultiplicationProblem extends BaseMultiplicationProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.symbol = '×';
@@ -23,6 +22,7 @@ export default class Year4MultiplicationProblem extends BaseMultiplicationProble
         const problemType = this._getRandomInt(1, 5);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Times tables 6, 7, 9, 11, 12 (the more challenging ones)
@@ -64,8 +64,11 @@ export default class Year4MultiplicationProblem extends BaseMultiplicationProble
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * b,
             operands: [a, b]
         };

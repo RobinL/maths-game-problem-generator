@@ -9,7 +9,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSquaredProblem
  */
 export default class Year3SquaredProblem extends BaseSquaredProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year3);
         this.generate()
@@ -20,6 +19,9 @@ export default class Year3SquaredProblem extends BaseSquaredProblem {
         // However, Year 3 does not explicitly teach the concept of "square numbers"
         // Children at this stage won't be asked to list square numbers, but they can compute a few if needed
 
+        let a, expression;
+        let expression_short = null;
+
         // Use values 1-8 as these might be encountered in multiplication practice
         // Focus especially on 3, 4, and 8 which are new times tables in Year 3
         const values = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -29,7 +31,7 @@ export default class Year3SquaredProblem extends BaseSquaredProblem {
         let totalWeight = weights.reduce((a, b) => a + b, 0);
         let randomWeight = this._getRandomInt(1, totalWeight);
         let cumulativeWeight = 0;
-        let a = 1; // Default value
+        a = 1; // Default value
 
         for (let i = 0; i < values.length; i++) {
             cumulativeWeight += weights[i];
@@ -41,10 +43,13 @@ export default class Year3SquaredProblem extends BaseSquaredProblem {
 
         // Format as multiplication rather than using squared notation
         // since that's how children would encounter it at this stage
-        const expression = `${a} × ${a}`;
+        expression = `${a} × ${a}`;
 
+        // Assign problemDetails ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * a,
             operands: [a]
         };

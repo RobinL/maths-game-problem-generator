@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseDivisionProblem
  */
 export default class Year3DivisionProblem extends BaseDivisionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year3);
         this.symbol = '÷';
@@ -22,6 +21,7 @@ export default class Year3DivisionProblem extends BaseDivisionProblem {
         const problemType = this._getRandomInt(1, 5);
 
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Division by 3 (related to 3 times table)
@@ -54,26 +54,22 @@ export default class Year3DivisionProblem extends BaseDivisionProblem {
                 b = [2, 3, 4, 5, 8, 10][this._getRandomInt(0, 5)];
                 // Choose a two-digit dividend that's divisible by the divisor
                 a = b * this._getRandomInt(2, 12);
-
                 // Occasionally phrase as "How many groups of X in Y?"
                 if (this._getRandomInt(0, 1) === 0) {
                     expression = `${a} ${this.symbol} ${b}`;
                 } else {
                     expression = `How many groups of ${b} in ${a}?`;
                     // Add short expression for game blocks (max 9 chars)
-                    this.problemDetails = {
-                        expression: expression,
-                        expression_short: `${a} ${this.symbol} ${b}`,
-                        answer: a / b,
-                        operands: [a, b]
-                    };
-                    return; // Exit early as we've already set problemDetails
+                    expression_short = `${a} ${this.symbol} ${b}`;
                 }
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a / b,
             operands: [a, b]
         };

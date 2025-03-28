@@ -9,7 +9,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseSquaredProblem
  */
 export default class Year1SquaredProblem extends BaseSquaredProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year1);
         this.generate()
@@ -19,16 +18,21 @@ export default class Year1SquaredProblem extends BaseSquaredProblem {
         // Squaring is not formally taught in Year 1
         // Children might encounter cases like 2×2 through multiplication practice
         // but they won't yet identify "square numbers" as a concept
-
         // Only use 1 or 2 as these are the only values that might be encountered
-        const a = this._getRandomInt(1, 2);
 
+        let a, expression;
+        let expression_short = null;
+
+        a = this._getRandomInt(1, 2);
         // Format as multiplication rather than using squared notation
         // since that's how children would encounter it
-        const expression = `${a} × ${a}`;
+        expression = `${a} × ${a}`;
 
+        // Assign problemDetails ensuring it always happens
         this.problemDetails = {
             expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a * a,
             operands: [a]
         };

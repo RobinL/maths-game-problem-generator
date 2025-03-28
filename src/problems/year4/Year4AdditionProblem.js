@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseAdditionProblem
  */
 export default class Year4AdditionProblem extends BaseAdditionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.generate()
@@ -21,7 +20,8 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
         // Randomly choose between different types of Year 4 addition problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Number bonds to 100 (e.g., 45 + 55 = 100)
@@ -35,6 +35,7 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
                     a += 10;
                     b -= 10;
                 }
+                expression = `${a} + ${b}`;
                 break;
 
             case 2: // Number bonds to 1000 using hundreds (e.g., 600 + 400 = 1000)
@@ -45,11 +46,13 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
                     a = 200 + this._getRandomInt(1, 5) * 100;
                     b = 1000 - a;
                 }
+                expression = `${a} + ${b}`;
                 break;
 
             case 3: // Adding decimals to make a whole (e.g., 0.7 + 0.3 = 1.0)
                 a = this._getRandomInt(1, 9) / 10;
                 b = 1.0 - a;
+                expression = `${a} + ${b}`;
                 break;
 
             case 4: // Adding a multiple of 10 to a three-digit number (e.g., 345 + 50)
@@ -59,6 +62,7 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
                 if ((a + b) % 100 === 0) {
                     b += 10;
                 }
+                expression = `${a} + ${b}`;
                 break;
 
             case 5: // Adding a two-digit number to a two-digit number (e.g., 47 + 36)
@@ -69,11 +73,15 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
                     // Adjust to cross 100
                     a += (100 - (a + b)) + this._getRandomInt(1, 10);
                 }
+                expression = `${a} + ${b}`;
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
-            expression: `${a} + ${b}`,
+            expression: expression,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a + b,
             operands: [a, b]
         };

@@ -6,7 +6,6 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseDivisionProblem
  */
 export default class Year6DivisionProblem extends BaseDivisionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year6);
         this.symbol = '÷';
@@ -23,7 +22,8 @@ export default class Year6DivisionProblem extends BaseDivisionProblem {
         // Randomly choose between different types of Year 6 division problems
         const problemType = this._getRandomInt(1, 5);
 
-        let a, b, expression, expression_short;
+        let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Division using known facts (e.g., 84 ÷ 7 = 12)
@@ -86,9 +86,11 @@ export default class Year6DivisionProblem extends BaseDivisionProblem {
                 break;
         }
 
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            expression_short: expression_short,
+            // Conditionally add expression_short only if it was set
+            ...(expression_short && { expression_short: expression_short }),
             answer: a / b,
             operands: [a, b]
         };

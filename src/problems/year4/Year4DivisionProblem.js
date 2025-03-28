@@ -6,14 +6,15 @@ import { DIFFICULTY_LEVELS } from '../../difficulty/DifficultyLevel.js';
  * @extends BaseDivisionProblem
  */
 export default class Year4DivisionProblem extends BaseDivisionProblem {
-
     constructor() {
         super(DIFFICULTY_LEVELS.year4);
         this.symbol = '÷';
+        this.isRemainderProblem = false; // Add flag to track remainder problems
         this.generate()
     }
 
     generate() {
+
         // With mastery of tables to 12×12, Year 4 students can mentally divide using those facts
         // They recognize factor pairs for numbers (e.g. factors of 48 are 6 and 8, so 48 ÷ 6 = 8)
         // They comfortably handle divisions like 81 ÷ 9 = 9 or 72 ÷ 8 = 9 in their heads
@@ -22,7 +23,10 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
         // Randomly choose between different types of Year 4 division problems
         const problemType = this._getRandomInt(1, 5);
 
+        this.isRemainderProblem = false; // Reset flag
+
         let a, b, expression;
+        let expression_short = null;
 
         switch (problemType) {
             case 1: // Division using 6, 7, 9, 11, 12 times tables (the more challenging ones)
@@ -60,20 +64,22 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                 expression = `${a} ${this.symbol} ${b}`;
                 break;
 
-            case 4: // Division with remainders (e.g., 37 ÷ 5 = 7 remainder 2)
+            case 4: // "What is the remainder" problems (e.g., Remainder from 37 ÷ 5 = 2)
+                this.isRemainderProblem = true; // Set the flag for remainder problems
                 b = this._getRandomInt(2, 9);
                 // Create a number that gives a remainder when divided by b
                 const quotient = this._getRandomInt(2, 12);
                 const remainder = this._getRandomInt(1, b - 1);
                 a = b * quotient + remainder;
-                expression = `${a} ${this.symbol} ${b}`;
+                expression = `Remainder from ${a} ${this.symbol} ${b}`;
+                expression_short = `${a} mod ${b}`;
+                this.symbol = 'mod'; // Change symbol for answer checking
                 break;
 
             case 5: // Factor pairs (e.g., 48 ÷ 6 = 8, where 6 and 8 are factors of 48)
                 // Choose a number with multiple factors
                 const compositeNumbers = [24, 36, 48, 60, 72, 84, 96, 108, 120, 144];
                 a = compositeNumbers[this._getRandomInt(0, compositeNumbers.length - 1)];
-
                 // Find all factors of a
                 const factors = [];
                 for (let i = 2; i <= Math.sqrt(a); i++) {
@@ -84,17 +90,41 @@ export default class Year4DivisionProblem extends BaseDivisionProblem {
                         }
                     }
                 }
-
                 // Choose a factor as divisor
                 b = factors[this._getRandomInt(0, factors.length - 1)];
                 expression = `${a} ${this.symbol} ${b}`;
                 break;
         }
 
+        // Calculate the answer based on the problem type
+        let answer;
+        if (problemType === 4) {
+            // For remainder problems, the answer is just the remainder
+            answer = a % b;
+        } else {
+            // For regular division problems
+            answer = a / b;
+        }
+
+        // Assign problemDetails after the switch, ensuring it always happens
         this.problemDetails = {
             expression: expression,
-            answer: a / b,
+            // We'll handle expression_short through the getter method
+            answer: answer,
             operands: [a, b]
         };
+    }
+
+    /**
+     * Override the expression_short getter to handle remainder problems correctly
+     * @returns {string} The short formatted expression
+     */
+    get expression_short() {
+        if (this.isRemainderProblem) {
+            return `${this.problemDetails.operands[0]} mod ${this.problemDetails.operands[1]}`;
+        }
+
+        // For regular division problems, use the parent class implementation
+        return super.expression_short;
     }
 }
