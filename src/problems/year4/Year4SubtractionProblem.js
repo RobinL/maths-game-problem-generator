@@ -18,7 +18,7 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
         // Rounding skills help them estimate and adjust when subtracting awkward numbers
 
         // Randomly choose between different types of Year 4 subtraction problems
-        const problemType = this._getRandomInt(1, 5);
+        const problemType = this._getRandomInt(1, 6);
 
         let a, b, expression;
         let expression_short = null;
@@ -72,6 +72,23 @@ export default class Year4SubtractionProblem extends BaseSubtractionProblem {
                 if ((a % 10) > (b % 10)) {
                     a -= (a % 10) - (b % 10) + 1;
                 }
+                expression = `${a} - ${b}`;
+                break;
+
+            case 6: // Subtract multiples of 1, 10, or 100 from four-digit numbers (e.g., 4821 - 200)
+                a = this._getRandomInt(1000, 9999);
+
+                // Randomly decide whether to subtract ones, tens, or hundreds
+                const subtractionType = this._getRandomInt(1, 3);
+
+                if (subtractionType === 1) { // Subtract ones
+                    b = this._getRandomInt(1, 9);
+                } else if (subtractionType === 2) { // Subtract tens
+                    b = this._getRandomInt(1, 9) * 10;
+                } else { // Subtract hundreds
+                    b = this._getRandomInt(1, 9) * 100;
+                }
+
                 expression = `${a} - ${b}`;
                 break;
         }

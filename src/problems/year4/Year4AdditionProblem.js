@@ -16,9 +16,10 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
         // They should know number pairs that total 100 reliably (e.g., 37 + 63)
         // They use that to calculate complements to 1000 (e.g., 370 + 630 = 1000)
         // They also begin to work with tenths in mental math (e.g., 0.4 + 0.6 = 1.0)
+        // They can mentally add multiples of 1, 10, or 100 to four-digit numbers
 
         // Randomly choose between different types of Year 4 addition problems
-        const problemType = this._getRandomInt(1, 5);
+        const problemType = this._getRandomInt(1, 6);
 
         let a, b, expression;
         let expression_short = null;
@@ -73,6 +74,23 @@ export default class Year4AdditionProblem extends BaseAdditionProblem {
                     // Adjust to cross 100
                     a += (100 - (a + b)) + this._getRandomInt(1, 10);
                 }
+                expression = `${a} + ${b}`;
+                break;
+
+            case 6: // Adding multiples of 1, 10, or 100 to four-digit numbers (e.g., 3456 + 30)
+                a = this._getRandomInt(1000, 9999);
+
+                // Randomly decide whether to add ones, tens, or hundreds
+                const additionType = this._getRandomInt(1, 3);
+
+                if (additionType === 1) { // Add ones
+                    b = this._getRandomInt(1, 9);
+                } else if (additionType === 2) { // Add tens
+                    b = this._getRandomInt(1, 9) * 10;
+                } else { // Add hundreds
+                    b = this._getRandomInt(1, 9) * 100;
+                }
+
                 expression = `${a} + ${b}`;
                 break;
         }
