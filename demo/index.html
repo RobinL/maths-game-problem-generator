@@ -253,6 +253,17 @@
                 expressionSpan.className = 'expression';
                 expressionSpan.textContent = `${problem.expression} = `;
 
+                // Add expression_short if available
+                if (problem.expression_short) {
+                    const shortExpressionSpan = document.createElement('span');
+                    shortExpressionSpan.className = 'expression-short';
+                    shortExpressionSpan.textContent = `(${problem.expression_short})`;
+                    shortExpressionSpan.style.marginLeft = '5px';
+                    shortExpressionSpan.style.color = '#16a085';
+                    shortExpressionSpan.style.fontStyle = 'italic';
+                    expressionSpan.appendChild(shortExpressionSpan);
+                }
+
                 // Create input field for user answer
                 const answerInput = document.createElement('input');
                 answerInput.type = 'text';
