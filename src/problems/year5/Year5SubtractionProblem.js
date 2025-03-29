@@ -19,7 +19,7 @@ export default class Year5SubtractionProblem extends BaseSubtractionProblem {
         // They are encouraged to estimate and then adjust, using inverse operations to check
 
         // Randomly choose between different types of Year 5 subtraction problems
-        const problemType = this._getRandomInt(1, 5);
+        const problemType = this._getRandomInt(1, 6);
 
         let a, b, expression;
         let expression_short = null;
@@ -65,6 +65,30 @@ export default class Year5SubtractionProblem extends BaseSubtractionProblem {
                 b = Math.round(b / 100) * 100;
                 expression = `${a} - ${b}`;
                 // Create a shorter version for display constraints
+                expression_short = `${a}-${b}`;
+                break;
+
+            case 6: // Decimal minus decimal (e.g., 5.7 - 3.3 = 2.4)
+                // Generate 'a' with one decimal place
+                a = this._getRandomInt(3, 15) + this._getRandomDecimal(0.1, 0.9, 1);
+                a = parseFloat(a.toFixed(1)); // Ensure precision
+
+                // Generate 'b' smaller than 'a', also with one decimal place
+                // Ensure b is at least 1.0 smaller than a
+                const maxBInt = Math.floor(a) - 1;
+                if (maxBInt < 1) { // Handle cases where a is small
+                    a += 2.0; // Adjust a upwards if needed
+                }
+                b = this._getRandomInt(1, Math.max(1, maxBInt)) + this._getRandomDecimal(0.1, 0.9, 1);
+                b = parseFloat(b.toFixed(1)); // Ensure precision
+
+                // Ensure a > b, regenerate b if needed (rare)
+                if (b >= a) {
+                    b = this._getRandomInt(1, Math.max(1, Math.floor(a) - 1)) + this._getRandomDecimal(0.1, 0.9, 1);
+                    b = parseFloat(b.toFixed(1));
+                }
+
+                expression = `${a} - ${b}`;
                 expression_short = `${a}-${b}`;
                 break;
         }
