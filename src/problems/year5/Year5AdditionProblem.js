@@ -18,7 +18,7 @@ export default class Year5AdditionProblem extends BaseAdditionProblem {
         // The difficulty level includes combining numbers like 10,000 + 2,500 or 5.7 + 3.3 mentally
 
         // Randomly choose between different types of Year 5 addition problems
-        const problemType = this._getRandomInt(1, 5);
+        const problemType = this._getRandomInt(1, 6);
 
         let a, b, expression;
         let expression_short = null;
@@ -77,6 +77,18 @@ export default class Year5AdditionProblem extends BaseAdditionProblem {
                 b = this._getRandomInt(100, 999);
                 expression = `${a} + ${b}`;
                 // Create a shorter version for display constraints
+                expression_short = `${a}+${b}`;
+                break;
+
+            case 6: // Adding hundredths to make exactly 1 (e.g., 0.75 + 0.25 = 1.00)
+                a = this._getRandomDecimal(0.01, 0.99, 2);
+                // Ensure 'a' is not too close to 0 or 1 to make 'b' meaningful
+                if (a < 0.1 || a > 0.9) {
+                    a = this._getRandomDecimal(0.1, 0.9, 2); // Re-generate if too extreme
+                }
+                // Calculate b to make the sum exactly 1.00
+                b = parseFloat((1.00 - a).toFixed(2));
+                expression = `${a} + ${b}`;
                 expression_short = `${a}+${b}`;
                 break;
         }
