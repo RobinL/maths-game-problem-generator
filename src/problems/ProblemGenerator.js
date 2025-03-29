@@ -40,6 +40,7 @@ import Year5SubtractionProblem from './year5/Year5SubtractionProblem.js';
 import Year5MultiplicationProblem from './year5/Year5MultiplicationProblem.js';
 import Year5DivisionProblem from './year5/Year5DivisionProblem.js';
 import Year5SquaredProblem from './year5/Year5SquaredProblem.js';
+import Year5CubeProblem from './year5/Year5CubeProblem.js';
 
 // Import Year 6-specific problem classes
 import Year6AdditionProblem from './year6/Year6AdditionProblem.js';
@@ -47,6 +48,7 @@ import Year6SubtractionProblem from './year6/Year6SubtractionProblem.js';
 import Year6MultiplicationProblem from './year6/Year6MultiplicationProblem.js';
 import Year6DivisionProblem from './year6/Year6DivisionProblem.js';
 import Year6SquaredProblem from './year6/Year6SquaredProblem.js';
+import Year6CubeProblem from './year6/Year6CubeProblem.js';
 
 
 /**
@@ -98,7 +100,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year5SubtractionProblem,
         multiplication: Year5MultiplicationProblem,
         division: Year5DivisionProblem,
-        squared: Year5SquaredProblem
+        squared: Year5SquaredProblem,
+        cube: Year5CubeProblem
     },
     // Year 6 problem types
     year6: {
@@ -106,7 +109,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year6SubtractionProblem,
         multiplication: Year6MultiplicationProblem,
         division: Year6DivisionProblem,
-        squared: Year6SquaredProblem
+        squared: Year6SquaredProblem,
+        cube: Year6CubeProblem
     },
     // Legacy problem types for other years (to be replaced)
 
