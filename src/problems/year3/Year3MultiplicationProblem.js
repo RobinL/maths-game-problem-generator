@@ -50,9 +50,17 @@ export default class Year3MultiplicationProblem extends BaseMultiplicationProble
                 break;
 
             case 5: // Multiply a two-digit number by a one-digit number (e.g., 12 × 3)
-                a = this._getRandomInt(10, 20);
-                // Choose from 2, 3, 4, 5, 8, 10 for the one-digit factor
-                b = [2, 3, 4, 5, 8, 10][this._getRandomInt(0, 5)];
+                a = this._getRandomInt(11, 50); // Expanded range up to 50 for mental partitioning strategies
+
+                // Weight towards 3, 4, 8 by including them more often in the selection array
+                const year3Digits = [
+                    2, 5, 10,    // Review digits (1 chance each)
+                    3, 3,        // Digit 3 (2 chances)
+                    4, 4,        // Digit 4 (2 chances)
+                    8, 8         // Digit 8 (2 chances)
+                ];
+                b = year3Digits[this._getRandomInt(0, year3Digits.length - 1)];
+
                 expression = `${a} ${this.symbol} ${b}`;
                 break;
         }

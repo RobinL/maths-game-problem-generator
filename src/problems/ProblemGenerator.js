@@ -143,10 +143,10 @@ const TYPE_DISTRIBUTIONS = {
         squared: 0          // Not formally taught
     },
     year3: {
-        addition: 0.3,      // Two-digit sums in multiples of 10
-        subtraction: 0.3,   // Two-digit differences in multiples of 10
-        multiplication: 0.2, // 2, 3, 4, 5, 8, 10 times tables
-        division: 0.2,      // Division with 2, 3, 4, 5, 8, 10
+        addition: 0.275,    // Slightly reduced from 0.3
+        subtraction: 0.275, // Slightly reduced from 0.3
+        multiplication: 0.25, // Increased from 0.2 to reflect expanded scope
+        division: 0.2,      // Kept the same
         squared: 0          // Not formally taught as "squares"
     },
     year4: {
