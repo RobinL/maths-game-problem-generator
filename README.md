@@ -18,12 +18,14 @@ import { generateProblem, checkAnswer } from 'maths-game-problem-generator';
 // Generate a Year 3 division problem
 const problem = generateProblem({
   yearLevel: 'year3',
-  type: 'division'
+  type: 'division',
+  multipleChoice: true
 });
 
 console.log(problem.expression);      // e.g., "72 ÷ 8"
 console.log(problem.answer);          // e.g., 9
 console.log(problem.formattedAnswer); // e.g., "9"
+console.log(problem.choices);         // e.g., ["8", "9", "11", "12"]
 
 // Check a user's answer
 const isCorrect = checkAnswer(problem, 9);  // true
@@ -60,6 +62,13 @@ const year5Cube = generateProblem({ yearLevel: 'year5', type: 'cube' });
 | `formattedAnswer` | string | Answer as a display string (handles decimals cleanly) |
 | `type` | string | Problem type (e.g., `"addition"`, `"squared"`) |
 | `yearLevel` | string | Year level (e.g., `"year3"`) |
+
+When called with `{ multipleChoice: true }`, the returned object also includes:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `choices` | string[] | Plausible answer choices including the correct answer |
+| `correctChoice` | string | The correct answer as a display string |
 
 ### `checkAnswer(problem, userAnswer)`
 
