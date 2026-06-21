@@ -30,6 +30,16 @@ console.log(problem.choices);         // e.g., ["8", "9", "11", "12"]
 // Check a user's answer
 const isCorrect = checkAnswer(problem, 9);  // true
 const alsoCorrect = checkAnswer(problem, "9");  // true (strings work too)
+
+// Generate a fractions problem
+const fractionProblem = generateProblem({
+  yearLevel: 'year5',
+  type: 'fraction',
+  multipleChoice: true
+});
+
+console.log(fractionProblem.expression); // e.g., "3/4 of 40"
+console.log(fractionProblem.answer);     // e.g., 30
 ```
 
 ## API
@@ -58,10 +68,12 @@ const year5Cube = generateProblem({ yearLevel: 'year5', type: 'cube' });
 |----------|------|-------------|
 | `expression` | string | The problem (e.g., `"15 + 7"`, `"√81"`, `"2³"`) |
 | `expression_short` | string | Shorter version for compact UIs (e.g., `"15+7"`) |
-| `answer` | number | The correct numerical answer |
+| `answer` | number|string | The correct answer. Most problems use numbers; symbolic fraction problems use display strings such as `"2/4"` |
 | `formattedAnswer` | string | Answer as a display string (handles decimals cleanly) |
 | `type` | string | Problem type (e.g., `"addition"`, `"squared"`) |
 | `yearLevel` | string | Year level (e.g., `"year3"`) |
+| `subtype` | string | Optional curriculum-oriented subtype (e.g., `"fraction_of_amount_operator"`) |
+| `expectedAnswer` | object | Optional structured answer metadata for fraction-aware checking |
 
 When called with `{ multipleChoice: true }`, the returned object also includes:
 
@@ -78,6 +90,8 @@ Validates a user's answer. Handles strings, numbers, and floating-point toleranc
 checkAnswer(problem, 42);      // true if answer is 42
 checkAnswer(problem, "42");    // true (string input works)
 checkAnswer(problem, 0.25);    // handles decimals with tolerance
+checkAnswer({ answer: "1/2", expectedAnswer: { kind: "fraction", numerator: 1, denominator: 2 } }, "2/4");
+// true: equivalent fractions work when expectedAnswer is present
 ```
 
 ### `getYearLevels()` / `getProblemTypes()`
@@ -89,10 +103,8 @@ getYearLevels();
 // ['reception', 'year1', 'year2', 'year3', 'year4', 'year5', 'year6']
 
 getProblemTypes();
-// ['addition', 'subtraction', 'multiplication', 'division', 'squared']
+// ['addition', 'subtraction', 'multiplication', 'division', 'squared', 'cube', 'fraction']
 ```
-
-> **Note:** `cube` problems are also available for Year 5 and Year 6, though not listed by `getProblemTypes()`.
 
 ### Constants
 
@@ -128,9 +140,9 @@ MathProblemGenerator.problemTypes; // Same as PROBLEM_TYPES
 | `year1` | 5-6 | Numbers to 20, +/- within 20 |
 | `year2` | 6-7 | Numbers to 100, ×/÷ by 2, 5, 10 |
 | `year3` | 7-8 | Numbers to 1000, ×/÷ by 3, 4, 8 |
-| `year4` | 8-9 | Larger numbers, all tables up to 12×12 |
-| `year5` | 9-10 | Decimals, squares, cubes, powers of 10 |
-| `year6` | 10-11 | Advanced mental strategies, square/cube recall |
+| `year4` | 8-9 | Larger numbers, all tables up to 12×12, non-unit fractions |
+| `year5` | 9-10 | Decimals, fractions as operators, squares, cubes, powers of 10 |
+| `year6` | 10-11 | Advanced mental strategies, upper-primary fractions, square/cube recall |
 
 ## Problem Types
 
@@ -142,6 +154,7 @@ MathProblemGenerator.problemTypes; // Same as PROBLEM_TYPES
 | `division` | Division problems (remainders in Year 4+) |
 | `squared` | Square numbers and square roots |
 | `cube` | Cube numbers (Year 5-6 only) |
+| `fraction` | Fraction questions, including fraction-of-quantity, equivalence, comparison, and selected operations |
 
 ## Examples
 
@@ -170,6 +183,14 @@ const cubed = generateProblem({
   type: 'cube'
 });
 // e.g., { expression: '2³', answer: 8, ... }
+
+// Year 5 fraction problem
+const fraction = generateProblem({
+  yearLevel: 'year5',
+  type: PROBLEM_TYPES.FRACTION,
+  multipleChoice: true
+});
+// e.g., { expression: 'three quarters of 40', answer: 30, choices: ['10', '30', '40', '34'], ... }
 ```
 
 ## License

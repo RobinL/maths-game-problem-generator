@@ -5,6 +5,7 @@ import ReceptionAdditionProblem from './reception/ReceptionAdditionProblem.js';
 import ReceptionSubtractionProblem from './reception/ReceptionSubtractionProblem.js';
 import ReceptionMultiplicationProblem from './reception/ReceptionMultiplicationProblem.js';
 import ReceptionDivisionProblem from './reception/ReceptionDivisionProblem.js';
+import ReceptionFractionProblem from './reception/ReceptionFractionProblem.js';
 
 // Import Year 1-specific problem classes
 import Year1AdditionProblem from './year1/Year1AdditionProblem.js';
@@ -12,6 +13,7 @@ import Year1SubtractionProblem from './year1/Year1SubtractionProblem.js';
 import Year1MultiplicationProblem from './year1/Year1MultiplicationProblem.js';
 import Year1DivisionProblem from './year1/Year1DivisionProblem.js';
 import Year1SquaredProblem from './year1/Year1SquaredProblem.js';
+import Year1FractionProblem from './year1/Year1FractionProblem.js';
 
 // Import Year 2-specific problem classes
 import Year2AdditionProblem from './year2/Year2AdditionProblem.js';
@@ -19,6 +21,7 @@ import Year2SubtractionProblem from './year2/Year2SubtractionProblem.js';
 import Year2MultiplicationProblem from './year2/Year2MultiplicationProblem.js';
 import Year2DivisionProblem from './year2/Year2DivisionProblem.js';
 import Year2SquaredProblem from './year2/Year2SquaredProblem.js';
+import Year2FractionProblem from './year2/Year2FractionProblem.js';
 
 // Import Year 3-specific problem classes
 import Year3AdditionProblem from './year3/Year3AdditionProblem.js';
@@ -26,6 +29,7 @@ import Year3SubtractionProblem from './year3/Year3SubtractionProblem.js';
 import Year3MultiplicationProblem from './year3/Year3MultiplicationProblem.js';
 import Year3DivisionProblem from './year3/Year3DivisionProblem.js';
 import Year3SquaredProblem from './year3/Year3SquaredProblem.js';
+import Year3FractionProblem from './year3/Year3FractionProblem.js';
 
 // Import Year 4-specific problem classes
 import Year4AdditionProblem from './year4/Year4AdditionProblem.js';
@@ -33,6 +37,7 @@ import Year4SubtractionProblem from './year4/Year4SubtractionProblem.js';
 import Year4MultiplicationProblem from './year4/Year4MultiplicationProblem.js';
 import Year4DivisionProblem from './year4/Year4DivisionProblem.js';
 import Year4SquaredProblem from './year4/Year4SquaredProblem.js';
+import Year4FractionProblem from './year4/Year4FractionProblem.js';
 
 // Import Year 5-specific problem classes
 import Year5AdditionProblem from './year5/Year5AdditionProblem.js';
@@ -41,6 +46,7 @@ import Year5MultiplicationProblem from './year5/Year5MultiplicationProblem.js';
 import Year5DivisionProblem from './year5/Year5DivisionProblem.js';
 import Year5SquaredProblem from './year5/Year5SquaredProblem.js';
 import Year5CubeProblem from './year5/Year5CubeProblem.js';
+import Year5FractionProblem from './year5/Year5FractionProblem.js';
 
 // Import Year 6-specific problem classes
 import Year6AdditionProblem from './year6/Year6AdditionProblem.js';
@@ -49,6 +55,7 @@ import Year6MultiplicationProblem from './year6/Year6MultiplicationProblem.js';
 import Year6DivisionProblem from './year6/Year6DivisionProblem.js';
 import Year6SquaredProblem from './year6/Year6SquaredProblem.js';
 import Year6CubeProblem from './year6/Year6CubeProblem.js';
+import Year6FractionProblem from './year6/Year6FractionProblem.js';
 
 
 /**
@@ -60,6 +67,7 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: ReceptionSubtractionProblem,
         multiplication: ReceptionMultiplicationProblem,
         division: ReceptionDivisionProblem,
+        fraction: ReceptionFractionProblem,
         // Squared not used in Reception
     },
     // Year 1 problem types
@@ -68,7 +76,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year1SubtractionProblem,
         multiplication: Year1MultiplicationProblem,
         division: Year1DivisionProblem,
-        squared: Year1SquaredProblem
+        squared: Year1SquaredProblem,
+        fraction: Year1FractionProblem
     },
     // Year 2 problem types
     year2: {
@@ -76,7 +85,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year2SubtractionProblem,
         multiplication: Year2MultiplicationProblem,
         division: Year2DivisionProblem,
-        squared: Year2SquaredProblem
+        squared: Year2SquaredProblem,
+        fraction: Year2FractionProblem
     },
     // Year 3 problem types
     year3: {
@@ -84,7 +94,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year3SubtractionProblem,
         multiplication: Year3MultiplicationProblem,
         division: Year3DivisionProblem,
-        squared: Year3SquaredProblem
+        squared: Year3SquaredProblem,
+        fraction: Year3FractionProblem
     },
     // Year 4 problem types
     year4: {
@@ -92,7 +103,8 @@ const PROBLEM_TYPE_CLASSES = {
         subtraction: Year4SubtractionProblem,
         multiplication: Year4MultiplicationProblem,
         division: Year4DivisionProblem,
-        squared: Year4SquaredProblem
+        squared: Year4SquaredProblem,
+        fraction: Year4FractionProblem
     },
     // Year 5 problem types
     year5: {
@@ -101,7 +113,8 @@ const PROBLEM_TYPE_CLASSES = {
         multiplication: Year5MultiplicationProblem,
         division: Year5DivisionProblem,
         squared: Year5SquaredProblem,
-        cube: Year5CubeProblem
+        cube: Year5CubeProblem,
+        fraction: Year5FractionProblem
     },
     // Year 6 problem types
     year6: {
@@ -110,7 +123,8 @@ const PROBLEM_TYPE_CLASSES = {
         multiplication: Year6MultiplicationProblem,
         division: Year6DivisionProblem,
         squared: Year6SquaredProblem,
-        cube: Year6CubeProblem
+        cube: Year6CubeProblem,
+        fraction: Year6FractionProblem
     },
     // Legacy problem types for other years (to be replaced)
 
@@ -122,53 +136,60 @@ const PROBLEM_TYPE_CLASSES = {
  */
 const TYPE_DISTRIBUTIONS = {
     reception: {
-        addition: 0.6,      // Focus on simple addition
-        subtraction: 0.3,   // Simple "taking away"
+        addition: 0.55,     // Focus on simple addition
+        subtraction: 0.25,  // Simple "taking away"
         multiplication: 0.1, // Simple doubling only (presented as "Double X")
         division: 0.0,      // Simple halving only (presented as "Half of X")
+        fraction: 0.1,      // Equal sharing and informal halving
         squared: 0          // Not taught at this level
     },
     year1: {
-        addition: 0.45,     // Addition within 20
-        subtraction: 0.45,  // Subtraction within 20
+        addition: 0.4,      // Addition within 20
+        subtraction: 0.4,   // Subtraction within 20
         multiplication: 0.05, // Doubling and counting in 2s, 5s, 10s
         division: 0.05,     // Halving small numbers
+        fraction: 0.1,      // Halves and quarters of quantities
         squared: 0          // Not taught at this level
     },
     year2: {
-        addition: 0.35,     // Addition facts up to 20
-        subtraction: 0.35,  // Subtraction facts within 20
+        addition: 0.3,      // Addition facts up to 20
+        subtraction: 0.3,   // Subtraction facts within 20
         multiplication: 0.15, // 2, 5, 10 times tables
         division: 0.15,     // Division with 2, 5, 10
+        fraction: 0.1,      // Halves, thirds, quarters and simple equivalence
         squared: 0          // Not formally taught
     },
     year3: {
-        addition: 0.275,    // Slightly reduced from 0.3
-        subtraction: 0.275, // Slightly reduced from 0.3
-        multiplication: 0.25, // Increased from 0.2 to reflect expanded scope
-        division: 0.2,      // Kept the same
+        addition: 0.25,     // Three-digit mental addition
+        subtraction: 0.25,  // Three-digit mental subtraction
+        multiplication: 0.2, // Expanded scope
+        division: 0.2,      // Division facts
+        fraction: 0.1,      // Unit fractions, comparison and same-denominator addition
         squared: 0          // Not formally taught as "squares"
     },
     year4: {
-        addition: 0.25,     // Three-digit numbers and simple decimals
-        subtraction: 0.25,  // Complements to 100/1000 and simple decimals
-        multiplication: 0.25, // All times tables up to 12 × 12
-        division: 0.25,     // Division facts from times tables up to 12 × 12
+        addition: 0.225,    // Three-digit numbers and simple decimals
+        subtraction: 0.225, // Complements to 100/1000 and simple decimals
+        multiplication: 0.225, // All times tables up to 12 × 12
+        division: 0.225,    // Division facts from times tables up to 12 × 12
+        fraction: 0.1,      // Non-unit fractions, tenths and decimal equivalence
         squared: 0          // Not formally emphasized yet
     },
     year5: {
-        addition: 0.2,      // Four-digit numbers and decimals
-        subtraction: 0.2,   // Large numbers and decimals with rounding strategies
-        multiplication: 0.2, // Complex mental multiplication with factors
-        division: 0.2,      // Factor pairs and mental division strategies
-        squared: 0.2        // Formally introduced with notation
+        addition: 0.18,     // Four-digit numbers and decimals
+        subtraction: 0.18,  // Large numbers and decimals with rounding strategies
+        multiplication: 0.18, // Complex mental multiplication with factors
+        division: 0.18,     // Factor pairs and mental division strategies
+        squared: 0.18,      // Formally introduced with notation
+        fraction: 0.1       // Fraction operators, equivalence and mixed numbers
     },
     year6: {
-        addition: 0.2,      // Fluent with large numbers and decimals
-        subtraction: 0.2,   // Multi-step strategies with large numbers and decimals
-        multiplication: 0.2, // Complex mental calculations and decimals
-        division: 0.2,      // Multi-step division and decimal division
-        squared: 0.2        // Consolidation of square numbers knowledge
+        addition: 0.18,     // Fluent with large numbers and decimals
+        subtraction: 0.18,  // Multi-step strategies with large numbers and decimals
+        multiplication: 0.18, // Complex mental calculations and decimals
+        division: 0.18,     // Multi-step division and decimal division
+        squared: 0.18,      // Consolidation of square numbers knowledge
+        fraction: 0.1       // Upper-primary fraction toolkit
     }
 };
 
@@ -241,7 +262,7 @@ function selectProblemType(difficulty) {
  */
 function getAvailableProblemTypes() {
     // Return the common problem types across all year groups
-    return ['addition', 'subtraction', 'multiplication', 'division', 'squared'];
+    return ['addition', 'subtraction', 'multiplication', 'division', 'squared', 'cube', 'fraction'];
 }
 
 /**

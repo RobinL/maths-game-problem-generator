@@ -59,6 +59,38 @@ export default class BaseMathProblem {
     }
 
     /**
+     * Get the optional curriculum subtype for this problem.
+     * @returns {string|undefined} The problem subtype
+     */
+    get subtype() {
+        return this.problemDetails?.subtype;
+    }
+
+    /**
+     * Get the optional structured expected answer for non-numeric problems.
+     * @returns {Object|undefined} Structured answer metadata
+     */
+    get expectedAnswer() {
+        return this.problemDetails?.expectedAnswer;
+    }
+
+    /**
+     * Get optional prebuilt multiple-choice answers for symbolic problems.
+     * @returns {Array<string>|undefined} Choices including the correct answer
+     */
+    get choices() {
+        return this.problemDetails?.choices;
+    }
+
+    /**
+     * Get optional distractors tuned to the generated question.
+     * @returns {Array<number>|undefined} Numeric distractor candidates
+     */
+    get distractors() {
+        return this.problemDetails?.distractors;
+    }
+
+    /**
      * Format a number to avoid floating-point precision issues
      * @param {number} value - The number to format
      * @param {number} [precision=10] - Maximum decimal places to show

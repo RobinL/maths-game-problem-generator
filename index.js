@@ -38,11 +38,23 @@ function generateProblem(options = {}) {
         yearLevel: yearLevel
     };
 
+    if (problem.subtype) {
+        generatedProblem.subtype = problem.subtype;
+    }
+
+    if (problem.expectedAnswer) {
+        generatedProblem.expectedAnswer = problem.expectedAnswer;
+    }
+
     if (!multipleChoice) {
         return generatedProblem;
     }
 
-    const choices = createMultipleChoiceAnswers(generatedProblem, { choiceCount });
+    const choices = createMultipleChoiceAnswers({
+        ...generatedProblem,
+        choices: problem.choices,
+        distractors: problem.distractors
+    }, { choiceCount });
 
     return {
         ...generatedProblem,
@@ -64,8 +76,32 @@ function generateProblem(options = {}) {
  */
 function createMultipleChoiceAnswers(problem, options = {}) {
     const choiceCount = Number.isInteger(options.choiceCount) ? Math.max(2, options.choiceCount) : 4;
+    if (Array.isArray(problem.choices) && problem.choices.length >= choiceCount) {
+        const formattedCorrect = problem.formattedAnswer ?? String(problem.answer);
+        const distractors = problem.choices.filter((choice) => String(choice) !== formattedCorrect);
+        return shuffleChoices([
+            formattedCorrect,
+            ...shuffleChoices(distractors).slice(0, choiceCount - 1)
+        ]);
+    }
+
     const correct = Number(problem.answer);
     const formattedCorrect = problem.formattedAnswer ?? formatChoiceValue(correct);
+
+    if (!Number.isFinite(correct)) {
+        const choices = new Set([formattedCorrect]);
+        const fallbackChoices = problem.choices ?? [];
+        for (const choice of fallbackChoices) {
+            choices.add(String(choice));
+            if (choices.size >= choiceCount) {
+                break;
+            }
+        }
+        while (choices.size < choiceCount) {
+            choices.add(`Option ${choices.size + 1}`);
+        }
+        return shuffleChoices([...choices]);
+    }
 
     const choices = new Map([[formattedCorrect, correct]]);
     const candidates = buildDistractorCandidates(problem);
@@ -95,6 +131,7 @@ function createMultipleChoiceAnswers(problem, options = {}) {
 function buildDistractorCandidates(problem) {
     const correct = Number(problem.answer);
     const operands = extractNumbers(problem.expression);
+    const priorityCandidates = Array.isArray(problem.distractors) ? problem.distractors : [];
     const candidates = [];
 
     candidates.push(...nearbyCandidates(correct, problem.yearLevel));
@@ -120,9 +157,14 @@ function buildDistractorCandidates(problem) {
     candidates.push(correct * 10, correct / 10, correct + 10, correct - 10);
     candidates.push(Math.round(correct), Math.floor(correct), Math.ceil(correct));
 
-    return candidates
+    const sortedCandidates = candidates
         .filter((value) => Number.isFinite(value))
         .sort((a, b) => Math.abs(a - correct) - Math.abs(b - correct));
+
+    return [
+        ...priorityCandidates.filter((value) => Number.isFinite(value)),
+        ...sortedCandidates
+    ];
 }
 
 function nearbyCandidates(correct, yearLevel = 'reception') {
@@ -200,6 +242,18 @@ function shuffleChoices(choices) {
  * @returns {boolean} Whether the answer is correct
  */
 function checkAnswer(problem, userAnswer) {
+    if (problem.expectedAnswer) {
+        const isCorrect = checkStructuredAnswer(problem.expectedAnswer, userAnswer, problem.answer);
+        console.log(`User Answer: ${userAnswer}, Correct Answer: ${problem.formattedAnswer ?? problem.answer}, Correct: ${isCorrect}`);
+        return isCorrect;
+    }
+
+    if (typeof problem.answer !== 'number') {
+        const isCorrect = normalizeTextAnswer(userAnswer) === normalizeTextAnswer(problem.answer);
+        console.log(`User Answer: ${userAnswer}, Correct Answer: ${problem.answer}, Correct: ${isCorrect}`);
+        return isCorrect;
+    }
+
     // Convert userAnswer to a number if it's a string
     const numericUserAnswer = typeof userAnswer === 'string' ? parseFloat(userAnswer) : userAnswer;
 
@@ -228,6 +282,77 @@ function checkAnswer(problem, userAnswer) {
     console.log(`User Answer: ${numericUserAnswer}, Correct Answer: ${problem.answer}, Correct: ${isCorrect}`);
 
     return isCorrect;
+}
+
+function checkStructuredAnswer(expectedAnswer, userAnswer, legacyAnswer) {
+    switch (expectedAnswer.kind) {
+        case 'integer':
+        case 'decimal':
+        case 'percentage':
+            return compareNumericAnswer(expectedAnswer.value, userAnswer);
+        case 'fraction': {
+            const parsed = parseFractionAnswer(userAnswer);
+            if (!parsed) {
+                return false;
+            }
+            const expected = simplifyFraction(expectedAnswer.numerator, expectedAnswer.denominator);
+            const actual = simplifyFraction(parsed.numerator, parsed.denominator);
+            return expected.numerator === actual.numerator && expected.denominator === actual.denominator;
+        }
+        case 'mixed':
+            return normalizeTextAnswer(userAnswer) === normalizeTextAnswer(legacyAnswer);
+        case 'fractionString':
+        case 'comparison':
+            return normalizeTextAnswer(userAnswer) === normalizeTextAnswer(expectedAnswer.value);
+        default:
+            return normalizeTextAnswer(userAnswer) === normalizeTextAnswer(legacyAnswer);
+    }
+}
+
+function compareNumericAnswer(correctAnswer, userAnswer) {
+    const numericUserAnswer = typeof userAnswer === 'string' ? parseFloat(userAnswer) : userAnswer;
+    if (isNaN(numericUserAnswer)) {
+        return false;
+    }
+    return Math.abs(correctAnswer - numericUserAnswer) < 1e-10;
+}
+
+function parseFractionAnswer(value) {
+    if (typeof value !== 'string') {
+        return null;
+    }
+    const match = value.trim().match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
+    if (!match) {
+        return null;
+    }
+    const numerator = Number(match[1]);
+    const denominator = Number(match[2]);
+    if (!Number.isInteger(numerator) || !Number.isInteger(denominator) || denominator === 0) {
+        return null;
+    }
+    return { numerator, denominator };
+}
+
+function simplifyFraction(numerator, denominator) {
+    const divisor = gcd(Math.abs(numerator), Math.abs(denominator));
+    const sign = denominator < 0 ? -1 : 1;
+    return {
+        numerator: sign * numerator / divisor,
+        denominator: Math.abs(denominator) / divisor
+    };
+}
+
+function gcd(a, b) {
+    while (b !== 0) {
+        const remainder = a % b;
+        a = b;
+        b = remainder;
+    }
+    return a || 1;
+}
+
+function normalizeTextAnswer(value) {
+    return String(value).trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
 /**
